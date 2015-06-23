@@ -9,7 +9,7 @@ var App = function(){
 
   //initial page load aggregation call 
   //TODO use fda api wrapper 
-  this.getData("https://api.fda.gov/food/enforcement.json?&count=state", function(data) {
+  this.getData("https://api.fda.gov/food/enforcement.json?api_key=J9fMuXQVgb0ftI7BPSEDGMT49c9yXdHxKPWRxaVN&count=state", function(data) {
     self.enforcementCountByState(data);
     self.showList(data, "Recall Enforcement Count by State");
   });
