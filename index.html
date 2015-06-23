@@ -1,0 +1,20 @@
+<!doctype html> <html class=no-js> <head> <meta charset=utf-8> <meta name=description> <meta name=viewport content="width=device-width, initial-scale=1"> <title>Open FDA</title>  <link rel=stylesheet href=http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css> <link rel=stylesheet href=styles/main.css> <script src=scripts/vendor/modernizr.js></script> </head> <body> <!--[if lt IE 10]>
+ <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+ <![endif]--> <nav class="navbar navbar-default navbar-fixed-top"> <div> <div class=navbar-header> <a class=navbar-brand href=#>Open FDA</a> </div> </div> </nav> <div id=map></div> <div id=list-container> <h4 id=list-header></h4> <hr> <ul id=list></ul> </div> <div class=footer> <p>Esri</p> </div>  <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script> <script src=scripts/vendor.js></script> <script src=scripts/plugins.js></script> <script src=http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js></script> <script src=http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/1.0.0-rc.6/esri-leaflet.js></script> <script src=scripts/main.js></script> <script>
+      $(document).ready(function() {
+        init_app();
+      });
+      
+      var app;
+      function init_app(){
+        app = new App( {} );
+        window.app = app;
+      }
+    </script> </body> </html> 
