@@ -8,6 +8,7 @@ var App = function(){
   this.addStatesLayer();
 
   //initial page load aggregation call 
+  //TODO use fda api wrapper 
   this.getData("https://api.fda.gov/food/enforcement.json?&count=state", function(data) {
     self.enforcementCountByState(data);
     self.showList(data, "Recall Enforcement Count by State");
@@ -101,6 +102,7 @@ App.prototype.showList = function(data, title) {
 * require only URL
 * returns data.results array
 */
+//TODO use fda api wrapper 
 App.prototype.getData = function(url, callback) {
   //show loader 
 
