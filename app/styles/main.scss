@@ -172,16 +172,18 @@ body,html {
   .leaflet-bar {
     box-shadow:none;
     border-radius: 0px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
   }
 }
 
 .geocoder-control-input {
-  background-color:#f8f8f8;
+  //background-color:#f8f8f8;
 }
 
 #search-helper {
   margin-top: 25px;
-  background-color:#f8f8f8;
+  background-color:#FFF;
   padding:5px;
   padding-top:4px;
   border-top-right-radius: 0px;

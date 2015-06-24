@@ -80,6 +80,7 @@ App.prototype.enforcementCountByState = function(data) {
 
   var keys = _.keys(this.states);
   var counts = {};
+  
   _.each(data, function(result) {
     if ( _.contains(keys, result.term.toUpperCase() ) ) {
       counts[result.term.toUpperCase()] = result.count;
@@ -101,6 +102,8 @@ App.prototype.enforcementCountByState = function(data) {
     var cnt = counts[feature.properties.STATE_ABBR];
     return {color: getColor(cnt), stroke: '#FFF', weight: 1 }; 
   });
+
+  this.enforceData = data;
 }
 
 /****************** UI functions *************/
@@ -258,6 +261,26 @@ App.prototype._wire = function() {
   this.statesLayer.on('click', function(e) {
     var state = e.layer.feature.properties.STATE_ABBR;
     self._find({ text: state });
+  });
+
+  this.statesLayer.on('mouseover', function(e) {
+    console.log('hover', e);
+    var layer = e.layer;
+    
+    layer.setStyle({
+        weight: 1,
+        color: '#FFF',
+        dashArray: '',
+        fillOpacity: 0.3
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+  });
+
+  this.statesLayer.on('mouseout', function(e) {
+    self.enforcementCountByState(self.enforceData);
   });
 
   $('#close-list').on('click', function() {
