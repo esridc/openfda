@@ -13,6 +13,7 @@
     <!-- endbuild -->
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/1.0.0-rc.4/esri-leaflet-geocoder.css">
 
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -81,8 +82,11 @@
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
         <script src="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/1.0.0-rc.6/esri-leaflet.js"></script>
 
+        <script src="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/1.0.0-rc.4/esri-leaflet-geocoder.js"></script>
+
         <!-- build:js scripts/main.js -->
         <script src="scripts/lodash.min.js"></script>
+        <script src="scripts/recalls.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 
@@ -93,8 +97,8 @@
       
       var app;
       function init_app(){
+        recalls = new Recalls( {} );
         app = new App( {} );
-        window.app = app;
       }
     </script>
 </body>
