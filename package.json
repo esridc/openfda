@@ -27,6 +27,10 @@
     "wiredep": "^2.0.0"
   },
   "dependencies": {
-    "gulp-gh-pages": "^0.5.2"
+    "gulp-gh-pages": "^0.5.2",
+    "gulp-mocha": "^2.1.2"
+  },
+  "scripts": {
+    "test": "gulp test"
   }
 }
