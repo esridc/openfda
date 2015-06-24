@@ -202,6 +202,12 @@ body,html {
   background-color: #FFF;
   right: 0px;
   border-top: 1px solid #DDD;
+  z-index: 100;
+  right:20px;
+  width:400px;
+  bottom:70px;
+  border-radius:2px;
+  overflow: hidden;
   #legend-title {
     margin-top:8px;
     font-size: 0.8em;
