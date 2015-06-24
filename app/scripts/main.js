@@ -132,7 +132,7 @@ App.prototype._find = function(data) {
   
   recalls.find(options, function(results) {
     //console.log('find callback: ', results);
-    self.showList(results, "Food Recalls for " + data.text, 'recalls' );
+    self.showList(results, "Recalls of distributions that include " + data.text, 'recalls' );
   });
 }
 
