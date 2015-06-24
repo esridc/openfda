@@ -4,6 +4,15 @@ $icon-font-path: '../fonts/';
 @import "bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/fonts/glyphicons-halflings-regular.eot');
+  src: url('/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  url('/fonts/glyphicons-halflings-regular.woff') format('woff'),
+  url('/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+  url('/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -58,8 +67,16 @@ body,html {
   }
 }
 
+#logo {
+  display:none;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
+  #logo {
+    display: block;
+  }
+
   .container {
     max-width: 730px;
   }
@@ -80,15 +97,14 @@ body,html {
 }
 
 #list-container {
-  display: none;
-  background:#FFF;
+  background:#f8f8f8;
   position: absolute;
   z-index: 100;
-  top:70px;
+  top:60px;
   padding:15px;
   right:20px;
   width:400px;
-  height:80%;
+  bottom:70px;
   border-radius:2px;
   overflow: hidden;
   overflow-y:auto;
@@ -97,12 +113,102 @@ body,html {
   }
   ul#list {
     margin-top:-10px;
+  }
+  ul#list,ul#danger-list,ul#slight-list,ul#unlikely-list {
     list-style: none;
     padding-left: 0px;
+    margin-top:10px;
     li {
       border-bottom: 1px solid #F2F2F2;
-      margin-bottom: 5px;
-      padding-bottom: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
     }
+  }
+  .recalling-firm {
+    font-weight: 600;
+  }
+  .recall-reason {
+    color:#999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .recall-number-title, .recall-item-description-title {
+    font-weight:500;
+  }
+  .show-details {
+    color: #337ab7;
+    cursor: pointer;
+    margin-top:3px;
+  }
+  .detail-section {
+    margin-bottom:15px;
+  }
+  .detail-title {
+    color:#999;
+  }
+  li.active > a {
+    background-color:#f8f8f8;
+  }
+  #close-list {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color:#444;
+    :hover {
+      cursor: pointer;
+      color:#000;
+    }
+  }
+  #back {
+    cursor: pointer;
+  }
+}
+
+//search
+.geocoder-control.leaflet-control {
+  left:40px;
+  top:-62px;
+  .leaflet-bar {
+    box-shadow:none;
+    border-radius: 0px;
+  }
+}
+
+.geocoder-control-input {
+  background-color:#f8f8f8;
+}
+
+#search-helper {
+  margin-top: 25px;
+  background-color:#f8f8f8;
+  padding:5px;
+  padding-top:4px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  //box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+}
+
+
+//mobile
+@media screen and (max-width: 768px) {
+
+  .geocoder-control.leaflet-control {
+    top:-70px;
+  }
+
+  #list-container {
+    display: none;
+    left: 20px;
+    right: 20px;
+    bottom:30px;
+    width: auto;
+    top:135px;
+  }
+
+  .nav-tabs li {
+    font-size: 0.8em;
   }
 }

@@ -2,16 +2,20 @@ var App = function(){
   var self = this;
   
   this.states = this._getStates();
+  this.geocodeService = new L.esri.Geocoding.Services.Geocoding();
 
   //setup map and states 
   this.createMap();
   this.addStatesLayer();
+  this.constructUI();
+  this._wire();
 
   //initial page load aggregation call 
   recalls.count({type: 'state'}, function(data) {
     self.enforcementCountByState(data);
     self.showList(data, 'Recall Enforcement Count by State', 'count');
   });
+
 };
 
 /*
@@ -47,6 +51,21 @@ App.prototype.addStatesLayer = function() {
       return {color: '#7fbbdf', stroke: '#FFF', weight: 1 };
     }
   }).addTo(this.map);
+}
+
+
+
+App.prototype.constructUI = function() {
+
+  var el = '<div id="search-helper" class="leaflet-bar">Or select location on map</div>'
+
+  $('.geocoder-control input').attr('placeholder', 'Search for places or addresses');
+  $('.geocoder-control').addClass('geocoder-control-expanded').append(el);
+
+  //sizing
+  var height = $(window).height();
+  //$('#list-container').css({'height': height - });
+
 }
 
 
@@ -92,25 +111,126 @@ App.prototype.enforcementCountByState = function(data) {
 */ 
 App.prototype.showList = function(data, title, type) {
   var self = this;
+  console.log('data', data);
+  this.data = data;
 
-  $('#list-container').show();
+  //$('#list-container').show();
   $('#list').empty();
+  $('.detail-list').empty();
   $('#list-header').html(title);
+  $('#detail-item').empty().hide();
 
   if ( type === 'count' ) {
+    $('#list').show();
+    $('#detail-tabs').hide();
     _.each(data, function(result) {
       var el = '<li class="list-element">'+self.states[result.term.toUpperCase()]+': '+result.count.toLocaleString()+'</li>';
       $('#list').append(el);
     });
   } else if ( type === 'recalls' ) {
+    
+    $('#list').hide();
+    $('#detail-tabs').show();
+    $('#list-container').show();
+
     _.each(data, function(result) {
+      console.log('result', result);
+
       var el = '<li class="list-element">\
-          <div>State: '+result.state +'</div>\
-          <div>'+result.reason_for_recall +'</div>\
+          <div class="recalling-firm">'+result.recalling_firm +'</div>\
+          <div>Source State: '+self.states[result.state] +'</div>\
+          <div class="recall-reason">'+result.reason_for_recall +'</div>\
+          <div class="recall-number"><span class="recall-number-title">Item Number</span>: '+result.recall_number +'</div>\
+          <div class="recall-item-description"><span class="recall-item-description-title">Item Description</span>: '+result.product_description +'</div>\
+          <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
         </li>';
-      $('#list').append(el);
+
+      if ( result.classification === "Class I" ) {
+        $('#danger-list').append(el);
+      } else if ( result.classification === "Class II" ) {
+        $('#slight-list').append(el);
+      } else if ( result.classification === "Class III" ) {
+        $('#unlikely-list').append(el);
+      }
     });
+
+    $('.show-details').on('click', function(e) {
+      var id = e.target.id;
+      self.showDetails(id, title);
+    });
+
   }
+}
+
+
+
+App.prototype.showDetails = function(id, title) {
+  var self = this;
+
+  _.each(this.data, function(result) {
+    if ( result.recall_number === id ) {
+      $('#detail-tabs').hide();
+      $('#detail-item').empty().show();
+
+      $('#list-header').html('<span class="glyphicon glyphicon-arrow-left" id="back"></span> '+ result.recalling_firm);
+
+      var html = '<div>\
+          <div class="detail-section">\
+            <div class="detail-title">Reason for Recall</div>\
+            <div class="detail-text">'+result.reason_for_recall+'</div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="detail-title">Product Description</div>\
+            <div class="detail-text">'+result.product_description+'</div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="col-md-6">\
+              <div class="detail-title">Initiation Date</div>\
+              <div class="detail-text">'+result.recall_initiation_date+'</div>\
+            </div>\
+            <div class="col-md-6">\
+              <div class="detail-title">Report Date</div>\
+              <div class="detail-text">'+result.report_date+'</div>\
+            </div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="col-md-6">\
+              <div class="detail-title">Recall Number</div>\
+              <div class="detail-text">'+result.recall_number+'</div>\
+            </div>\
+            <div class="col-md-6">\
+              <div class="detail-title">Status</div>\
+              <div class="detail-text">'+result.status+'</div>\
+            </div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="col-md-6">\
+              <div class="detail-title">Classification</div>\
+              <div class="detail-text">'+result.classification+'</div>\
+            </div>\
+            <div class="col-md-6">\
+              <div class="detail-title">Initiated by</div>\
+              <div class="detail-text">'+result.recalling_firm+'</div>\
+            </div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="detail-title">Quantity</div>\
+            <div class="detail-text">'+result.product_quantity+'</div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="detail-title">Distribution Pattern</div>\
+            <div class="detail-text">'+result.distribution_pattern+'</div>\
+          </div>\
+        </div>'
+
+      $('#detail-item').append(html);
+    }
+  });
+
+  $('#list-header').on('click', function() {
+    self.showList(self.data, title, 'recalls');
+  });
+
 }
 
 
@@ -119,6 +239,32 @@ App.prototype.showList = function(data, title, type) {
 
 /****************************************/
 
+
+App.prototype._wire = function() {
+  var self = this;
+
+  $('.geocoder-control input').on('blur', function() {
+    $(this).attr('placeholder', 'Search for places or addresses');
+    $('.geocoder-control').addClass('geocoder-control-expanded');
+  });
+
+  //reverse geocoding
+  this.map.on('click', function(e) {
+    self.geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+      L.marker(result.latlng).addTo(self.map).bindPopup(result.address.Match_addr).openPopup();
+    });
+  });
+
+  this.statesLayer.on('click', function(e) {
+    var state = e.layer.feature.properties.STATE_ABBR;
+    self._find({ text: state });
+  });
+
+  $('#close-list').on('click', function() {
+    $('#list-container').hide();
+  });
+
+}
 
 
 App.prototype._find = function(data) {
@@ -132,7 +278,7 @@ App.prototype._find = function(data) {
   
   recalls.find(options, function(results) {
     //console.log('find callback: ', results);
-    self.showList(results, "Recalls of distributions that include " + data.text, 'recalls' );
+    self.showList(results, "Recalls in " + self.states[data.text], 'recalls' );
   });
 }
 
