@@ -194,6 +194,37 @@ body,html {
 }
 
 
+#legend {
+  width: 100%;
+  bottom: 0px;
+  height: 44px;
+  position: absolute;
+  background-color: #FFF;
+  right: 0px;
+  border-top: 1px solid #DDD;
+  #legend-title {
+    margin-top:8px;
+    font-size: 0.8em;
+  }
+  #legend-min,#legend-max {
+    font-size:0.6em;
+  }
+  #legend-min {
+    position: absolute;
+    left:35px;
+    bottom:2px
+  }
+  #legend-max {
+    position: absolute;
+    right:35px;
+    bottom:2px
+  }
+  .legend-item {
+    height:6px;
+    opacity:0.6;
+  }
+}
+
 //mobile
 @media screen and (max-width: 768px) {
 

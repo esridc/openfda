@@ -103,6 +103,16 @@ App.prototype.enforcementCountByState = function(data) {
     return {color: getColor(cnt), stroke: '#FFF', weight: 1 }; 
   });
 
+  $('#legend-title').html('Recall Enforcement Count by State');
+  $('#legend-item-1').css({'background': '#800026'});
+  $('#legend-item-2').css({'background': '#E31A1C'});
+  $('#legend-item-3').css({'background': '#FC4E2A'});
+  $('#legend-item-4').css({'background': '#FD8D3C'});
+  $('#legend-item-5').css({'background': '#FEB24C'});
+  $('#legend-item-6').css({'background': '#FFEDA0'});
+  $('#legend-min').html('<10');
+  $('#legend-max').html('>1,000');
+  
   this.enforceData = data;
 }
 
