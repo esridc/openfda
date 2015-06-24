@@ -35,22 +35,9 @@ Recalls.prototype.find = function(options, cb) {
   console.log('find: ', options);
 
   var api = options.api || this.api;
-  var url = this.base_url + api + '?limit=100&api_key=' + this.api_key + '&search=distribution_pattern='+options.location;
+  var url = this.base_url + api + '?limit=100&api_key=' + this.api_key + '&search=distribution_pattern=' + options.location;
 
   this.getData(url, {}, function(data) {
-    /*
-    var results = [];
-    _.each(data, function(result) {
-      var loc = _.trim(options.location.split(',')[1]);
-      
-      if ( result.state === loc ) {
-        results.push(result);
-      }
-
-    });
-
-    cb(results);
-    */
     cb(data);
   });
 }
