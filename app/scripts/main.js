@@ -15,6 +15,7 @@ var App = function(){
     self.enforcementCountByState(data);
     self.showList(data, 'Recall Enforcement Count by State', 'count');
   });
+
 };
 
 /*
@@ -60,6 +61,11 @@ App.prototype.constructUI = function() {
 
   $('.geocoder-control input').attr('placeholder', 'Search for places or addresses');
   $('.geocoder-control').addClass('geocoder-control-expanded').append(el);
+
+  //sizing
+  var height = $(window).height();
+  //$('#list-container').css({'height': height - });
+
 }
 
 
@@ -108,7 +114,7 @@ App.prototype.showList = function(data, title, type) {
   console.log('data', data);
   this.data = data;
 
-  $('#list-container').show();
+  //$('#list-container').show();
   $('#list').empty();
   $('.detail-list').empty();
   $('#list-header').html(title);
@@ -125,6 +131,7 @@ App.prototype.showList = function(data, title, type) {
     
     $('#list').hide();
     $('#detail-tabs').show();
+    $('#list-container').show();
 
     _.each(data, function(result) {
       console.log('result', result);
@@ -165,7 +172,7 @@ App.prototype.showDetails = function(id, title) {
       $('#detail-tabs').hide();
       $('#detail-item').empty().show();
 
-      $('#list-header').html('<span class="glyphicon glyphicon-arrow-left"></span> '+ result.recalling_firm);
+      $('#list-header').html('<span class="glyphicon glyphicon-arrow-left" id="back"></span> '+ result.recalling_firm);
 
       var html = '<div>\
           <div class="detail-section">\
@@ -195,6 +202,24 @@ App.prototype.showDetails = function(id, title) {
               <div class="detail-title">Status</div>\
               <div class="detail-text">'+result.status+'</div>\
             </div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="col-md-6">\
+              <div class="detail-title">Classification</div>\
+              <div class="detail-text">'+result.classification+'</div>\
+            </div>\
+            <div class="col-md-6">\
+              <div class="detail-title">Initiated by</div>\
+              <div class="detail-text">'+result.recalling_firm+'</div>\
+            </div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="detail-title">Quantity</div>\
+            <div class="detail-text">'+result.product_quantity+'</div>\
+          </div>\
+          <div class="detail-section">\
+            <div class="detail-title">Distribution Pattern</div>\
+            <div class="detail-text">'+result.distribution_pattern+'</div>\
           </div>\
         </div>'
 
@@ -233,6 +258,10 @@ App.prototype._wire = function() {
   this.statesLayer.on('click', function(e) {
     var state = e.layer.feature.properties.STATE_ABBR;
     self._find({ text: state });
+  });
+
+  $('#close-list').on('click', function() {
+    $('#list-container').hide();
   });
 
 }

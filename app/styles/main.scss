@@ -67,8 +67,16 @@ body,html {
   }
 }
 
+#logo {
+  display:none;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
+  #logo {
+    display: block;
+  }
+
   .container {
     max-width: 730px;
   }
@@ -89,15 +97,14 @@ body,html {
 }
 
 #list-container {
-  display: none;
-  background:#FFF;
+  background:#f8f8f8;
   position: absolute;
   z-index: 100;
   top:70px;
   padding:15px;
   right:20px;
   width:400px;
-  height:80%;
+  bottom:70px;
   border-radius:2px;
   overflow: hidden;
   overflow-y:auto;
@@ -140,6 +147,22 @@ body,html {
   .detail-title {
     color:#999;
   }
+  li.active > a {
+    background-color:#f8f8f8;
+  }
+  #close-list {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color:#444;
+    :hover {
+      cursor: pointer;
+      color:#000;
+    }
+  }
+  #back {
+    cursor: pointer;
+  }
 }
 
 //search
@@ -152,14 +175,40 @@ body,html {
   }
 }
 
+.geocoder-control-input {
+  background-color:#f8f8f8;
+}
+
 #search-helper {
   margin-top: 25px;
-  background-color: #FFF;
+  background-color:#f8f8f8;
   padding:5px;
   padding-top:4px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+  //box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+}
+
+
+//mobile
+@media screen and (max-width: 768px) {
+
+  .geocoder-control.leaflet-control {
+    top:-70px;
+  }
+
+  #list-container {
+    display: none;
+    left: 20px;
+    right: 20px;
+    bottom:30px;
+    width: auto;
+    top:135px;
+  }
+
+  .nav-tabs li {
+    font-size: 0.8em;
+  }
 }
