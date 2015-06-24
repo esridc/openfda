@@ -8,7 +8,7 @@ Demonstration of Agile Process
 
 ### Personas
 
-Detailed Personas located in project wiki 
+Detailed Personas located in project wiki  - https://github.com/esridc/openfda/wiki
 
 ### Backlog
 
@@ -16,10 +16,10 @@ We are using Huboard for our backlog - https://huboard.com/esridc/openfda/
 
 ## Team
 
-- product owner
-- scrumaster
-- Brendan, Marten, Andrew - development engineers
-- Liza, Jody - product engineers
+- product owner - Gerry
+- scrumaster - Mike
+- Brendan, Marten, Andrew, Dnaiel - development engineers
+- Este, Liza, Jody - people
 
 ## Development
 
