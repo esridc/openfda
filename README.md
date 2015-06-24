@@ -8,6 +8,8 @@ Demonstration of Agile Process
 
 ### Personas
 
+Detailed Personas located in project wiki 
+
 ### Backlog
 
 We are using Huboard for our backlog - https://huboard.com/esridc/openfda/
