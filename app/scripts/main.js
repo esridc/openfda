@@ -8,10 +8,9 @@ var App = function(){
   this.addStatesLayer();
 
   //initial page load aggregation call 
-  //TODO use fda api wrapper 
-  this.getData("https://api.fda.gov/food/enforcement.json?api_key=J9fMuXQVgb0ftI7BPSEDGMT49c9yXdHxKPWRxaVN&count=state", function(data) {
+  recalls.count({type: 'state'}, function(data) {
     self.enforcementCountByState(data);
-    self.showList(data, "Recall Enforcement Count by State");
+    self.showList(data, 'Recall Enforcement Count by State', 'count');
   });
 };
 
@@ -21,12 +20,18 @@ var App = function(){
 *
 */
 App.prototype.createMap = function() {
-  
+  var self = this;
+
   this.map = L.map('map').setView([38.891, -80.94], 4);
 
   L.esri.basemapLayer("Gray").addTo(this.map);
   L.esri.basemapLayer("GrayLabels").addTo(this.map);
 
+  var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(this.map);
+
+  searchControl.on('results', function(data){
+    self._find(data);
+  });
 }
 
 
@@ -79,42 +84,58 @@ App.prototype.enforcementCountByState = function(data) {
   });
 }
 
+/****************** UI functions *************/
 
-
-App.prototype.showList = function(data, title) {
+/*
+*
+*
+*/ 
+App.prototype.showList = function(data, title, type) {
   var self = this;
 
   $('#list-container').show();
-
+  $('#list').empty();
   $('#list-header').html(title);
 
-  _.each(data, function(result) {
-    var el = '<li class="list-element">'+self.states[result.term.toUpperCase()]+': '+result.count.toLocaleString()+'</li>';
-    $('#list').append(el);
-  });
-}
-
-
-/************ API CALLS ****************/
-
-/*
-* generic get data call
-* require only URL
-* returns data.results array
-*/
-//TODO use fda api wrapper 
-App.prototype.getData = function(url, callback) {
-  //show loader 
-
-  $.getJSON(url, function(data) {
-    callback(data.results);
-  });
-
+  if ( type === 'count' ) {
+    _.each(data, function(result) {
+      var el = '<li class="list-element">'+self.states[result.term.toUpperCase()]+': '+result.count.toLocaleString()+'</li>';
+      $('#list').append(el);
+    });
+  } else if ( type === 'recalls' ) {
+    _.each(data, function(result) {
+      var el = '<li class="list-element">\
+          <div>State: '+result.state +'</div>\
+          <div>'+result.reason_for_recall +'</div>\
+        </li>';
+      $('#list').append(el);
+    });
+  }
 }
 
 
 
-/***************************************/
+/****************************************/
+
+/****************************************/
+
+
+
+App.prototype._find = function(data) {
+  var self = this;
+
+  console.log('_find data: ', data);
+  
+  var options = {};
+  options.location = data.text;
+  options.api = 'food/enforcement.json';
+  
+  recalls.find(options, function(results) {
+    //console.log('find callback: ', results);
+    self.showList(results, "Recalls of distributions that include " + data.text, 'recalls' );
+  });
+}
+
 
 
 /*
