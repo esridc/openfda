@@ -6,6 +6,7 @@ var $ = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var ghPages = require('gulp-gh-pages');
+var mocha = require('gulp-mocha');
 
 gulp.task('deploy', function() {
   return gulp.src('./dist/**/*')
@@ -31,6 +32,12 @@ gulp.task('styles', function () {
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
+});
+
+// run mocha tests
+gulp.task('test', function (){
+  return gulp.src('test/spec/test.js', {read: false})
+  .pipe(mocha({reporter: 'list'}));
 });
 
 gulp.task('jshint', function () {
@@ -102,7 +109,8 @@ gulp.task('serve', ['styles', 'fonts'], function () {
     'app/*.html',
     'app/scripts/**/*.js',
     'app/images/**/*',
-    '.tmp/fonts/**/*'
+    '.tmp/fonts/**/*',
+    'test/spec/test.js'
   ]).on('change', reload);
 
   gulp.watch('app/styles/**/*.scss', ['styles']);

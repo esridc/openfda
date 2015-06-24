@@ -21,10 +21,13 @@ We are using Huboard for our backlog - https://huboard.com/esridc/openfda/
 
 ## Development
 
-Install: `npm install`
+Install: `npm install` and `bower install`
 Run locally: `gulp serve`
 Build: `gulp build`
 Deploy to gh-pages: `gulp deploy`
+
+## Testing
+`gulp test`
 
 ## License 
 
