@@ -31,7 +31,8 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="">
         <div class="navbar-header">
-           <a class="navbar-brand" href="#">Open FDA</a>
+          <span class="navbar-brand"><img src="/images/fda.png" style="height:30px; margin-top:-5px; margin-left:-10px"></img></span>
+          <span class="navbar-brand" style="margin-left:-20px; margin-top:1px">Food Recalls</span>
         </div>
       </div>
     </nav>
@@ -42,10 +43,35 @@
       <h4 id="list-header"></h4>
       <hr />
       <ul id="list"></ul>
-    </div>
 
-    <div class="footer">
-      <p>Esri</p>
+      <div id="detail-tabs">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Dangerous</a></li>
+          <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Slight Threat</a></li>
+          <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Unlikely Threat</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="home">
+            <ul class="detail-list" id="danger-list"></ul>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="profile">
+            <ul class="detail-list" id="slight-list"></ul>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="messages">
+            <ul class="detail-list" id="unlikely-list"></ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="detail-item">
+
+      </div>
+
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

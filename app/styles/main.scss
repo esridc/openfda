@@ -4,6 +4,15 @@ $icon-font-path: '../fonts/';
 @import "bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/fonts/glyphicons-halflings-regular.eot');
+  src: url('/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  url('/fonts/glyphicons-halflings-regular.woff') format('woff'),
+  url('/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+  url('/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -97,12 +106,60 @@ body,html {
   }
   ul#list {
     margin-top:-10px;
+  }
+  ul#list,ul#danger-list,ul#slight-list,ul#unlikely-list {
     list-style: none;
     padding-left: 0px;
+    margin-top:10px;
     li {
       border-bottom: 1px solid #F2F2F2;
-      margin-bottom: 5px;
-      padding-bottom: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
     }
   }
+  .recalling-firm {
+    font-weight: 600;
+  }
+  .recall-reason {
+    color:#999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .recall-number-title, .recall-item-description-title {
+    font-weight:500;
+  }
+  .show-details {
+    color: #337ab7;
+    cursor: pointer;
+    margin-top:3px;
+  }
+  .detail-section {
+    margin-bottom:15px;
+  }
+  .detail-title {
+    color:#999;
+  }
+}
+
+//search
+.geocoder-control.leaflet-control {
+  left:40px;
+  top:-62px;
+  .leaflet-bar {
+    box-shadow:none;
+    border-radius: 0px;
+  }
+}
+
+#search-helper {
+  margin-top: 25px;
+  background-color: #FFF;
+  padding:5px;
+  padding-top:4px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.65);
 }
