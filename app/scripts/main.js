@@ -172,7 +172,7 @@ App.prototype.showDetails = function(id, title) {
       $('#detail-tabs').hide();
       $('#detail-item').empty().show();
 
-      $('#list-header').html('<span class="glyphicon glyphicon-arrow-left" id="back"></span> '+ result.recalling_firm);
+      $('#list-header').html('<span class="glyphicon glyphicon-chevron-left" id="back"></span> '+ result.recalling_firm);
 
       var html = '<div>\
           <div class="detail-section">\
@@ -186,11 +186,11 @@ App.prototype.showDetails = function(id, title) {
           <div class="detail-section">\
             <div class="col-md-6">\
               <div class="detail-title">Initiation Date</div>\
-              <div class="detail-text">'+result.recall_initiation_date+'</div>\
+              <div class="detail-text">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+'</div>\
             </div>\
             <div class="col-md-6">\
               <div class="detail-title">Report Date</div>\
-              <div class="detail-text">'+result.report_date+'</div>\
+              <div class="detail-text">'+moment(result.report_date, "YYYYMMDD").format('MMMM DD, YYYY')+'</div>\
             </div>\
           </div>\
           <div class="detail-section">\
