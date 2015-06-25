@@ -1,6 +1,14 @@
 var App = function(){
   var self = this;
-  
+    
+  $( document ).ajaxStart(function() {
+    NProgress.start();
+  });
+
+  $( document ).ajaxStop(function() {
+    NProgress.done();
+  });
+
   this.states = this._getStates();
   this.geocodeService = new L.esri.Geocoding.Services.Geocoding();
 
@@ -177,7 +185,7 @@ App.prototype.showList = function(data, title, type) {
     _.each(data, function(result) {
       console.log('result', result);
 
-      var el = '<li class="list-element">\
+      var el = '<li class="list-element animated slideInRight">\
           <div class="recalling-firm">'+result.recalling_firm +'</div>\
           <div class="col-md-6">\
             <div class="list-title">Initiation Date</div>\
@@ -298,7 +306,9 @@ App.prototype._wire = function() {
   //reverse geocoding
   this.map.on('click', function(e) {
     self.geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
-      L.marker(result.latlng).addTo(self.map).bindPopup(result.address.Match_addr).openPopup();
+      if ( result ) {
+        L.marker(result.latlng).addTo(self.map).bindPopup(result.address.Match_addr).openPopup();
+      }
     });
   });
 
