@@ -181,16 +181,18 @@ body,html {
   .leaflet-bar {
     box-shadow:none;
     border-radius: 0px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
   }
 }
 
 .geocoder-control-input {
-  background-color:#f8f8f8;
+  //background-color:#f8f8f8;
 }
 
 #search-helper {
   margin-top: 25px;
-  background-color:#f8f8f8;
+  background-color:#FFF;
   padding:5px;
   padding-top:4px;
   border-top-right-radius: 0px;
@@ -201,11 +203,55 @@ body,html {
 }
 
 
+#legend {
+  width: 100%;
+  bottom: 0px;
+  height: 44px;
+  position: absolute;
+  background-color: #FFF;
+  right: 0px;
+  border-top: 1px solid #DDD;
+  z-index: 100;
+  right:20px;
+  width:400px;
+  bottom:70px;
+  border-radius:2px;
+  overflow: hidden;
+  #legend-title {
+    margin-top:8px;
+    font-size: 0.8em;
+  }
+  #legend-min,#legend-max {
+    font-size:0.6em;
+  }
+  #legend-min {
+    position: absolute;
+    left:35px;
+    bottom:2px
+  }
+  #legend-max {
+    position: absolute;
+    right:35px;
+    bottom:2px
+  }
+  .legend-item {
+    height:6px;
+    opacity:0.6;
+  }
+}
+
 //mobile
 @media screen and (max-width: 768px) {
 
   .geocoder-control.leaflet-control {
     top:-70px;
+  }
+
+  #legend {
+    bottom:30px;
+    left: 20px;
+    right: 20px;
+    width: auto;
   }
 
   #list-container {
