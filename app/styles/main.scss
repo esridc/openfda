@@ -118,28 +118,50 @@ body,html {
     list-style: none;
     padding-left: 0px;
     margin-top:10px;
+    margin-bottom:35px;
     li {
-      border-bottom: 1px solid #F2F2F2;
+      border-bottom: 1px solid #CFCFCF;;
       margin-bottom: 10px;
       padding-bottom: 10px;
+      color:#9A9A9A;
+      .col-md-6 {
+        padding-left:0px;
+      }
+      .ongoing {
+        color:#e35956;
+      }
+      .completed {
+        color:#5DB986;
+      }
     }
   }
   .recalling-firm {
     font-weight: 600;
+    color:#444;
   }
   .recall-reason {
-    color:#999;
+    //color:#999;
+    //white-space: nowrap;
+    //overflow: hidden;
+    //text-overflow: ellipsis;
+  }
+  .recall-number-title, .recall-item-description-title, .list-title {
+    font-weight:400;
+    color:#666;
+  }
+  .recall-item-description {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .recall-number-title, .recall-item-description-title {
-    font-weight:500;
-  }
   .show-details {
     color: #337ab7;
     cursor: pointer;
-    margin-top:3px;
+    font-size:0.85em;
+    margin-top:8px;
+  }
+  #detail-item {
+    margin-bottom:40px;
   }
   .detail-section {
     margin-bottom:15px;
