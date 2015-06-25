@@ -70,6 +70,34 @@ App.prototype.constructUI = function() {
 
 
 
+App.prototype.selectState = function() {
+
+  $('#legend').hide();
+
+  this.statesLayer.setStyle(function(feature) {
+    return {color: '#337ab7', stroke: '#FFF', weight: 1, fillOpacity: 0.3}; 
+  });
+
+  if ( this.selectedState ) {
+    var layer = this.selectedState.layer;
+    
+    layer.setStyle({
+        weight: 1,
+        color: '#1a3d88',
+        dashArray: '',
+        fillOpacity: 0.3
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+
+  }
+
+}
+
+
+
 /*
 *
 * Create initial map view "Envorcement Counts by State"
@@ -151,10 +179,16 @@ App.prototype.showList = function(data, title, type) {
 
       var el = '<li class="list-element">\
           <div class="recalling-firm">'+result.recalling_firm +'</div>\
-          <div>Source State: '+self.states[result.state] +'</div>\
-          <div class="recall-reason">'+result.reason_for_recall +'</div>\
-          <div class="recall-number"><span class="recall-number-title">Item Number</span>: '+result.recall_number +'</div>\
-          <div class="recall-item-description"><span class="recall-item-description-title">Item Description</span>: '+result.product_description +'</div>\
+          <div class="col-md-6">\
+            <div class="list-title">Initiation Date</div>\
+            <div class="detail-text">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+'</div>\
+          </div>\
+          <div class="col-md-6">\
+            <div class="list-title">Status</div>\
+            <div class="detail-text '+result.status.toLowerCase()+'">'+result.status+'</div>\
+          </div>\
+          <div><span class="list-title">Recalled Product Source</span>: '+self.states[result.state] +'</div>\
+          <div class="recall-item-description"><span class="recall-item-description-title">Description</span>: '+result.product_description +'</div>\
           <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
         </li>';
 
@@ -271,10 +305,17 @@ App.prototype._wire = function() {
   this.statesLayer.on('click', function(e) {
     var state = e.layer.feature.properties.STATE_ABBR;
     self._find({ text: state });
+
+    self._stateSelected = true;
+    self.selectedState = e;
+    self.selectState();
+    
+    //self.map.removeLayer(self.statesLayer);
+
   });
 
   this.statesLayer.on('mouseover', function(e) {
-    console.log('hover', e);
+    //console.log('hover', e);
     var layer = e.layer;
     
     layer.setStyle({
@@ -290,7 +331,11 @@ App.prototype._wire = function() {
   });
 
   this.statesLayer.on('mouseout', function(e) {
-    self.enforcementCountByState(self.enforceData);
+    if ( !self._stateSelected ) {
+      self.enforcementCountByState(self.enforceData);
+    } else {
+      self.selectState();
+    }
   });
 
   $('#close-list').on('click', function() {
