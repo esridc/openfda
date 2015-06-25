@@ -17,8 +17,11 @@ We are using Huboard for our backlog - https://huboard.com/esridc/openfda/
 ## Team
 
 - product owner - Gerry
-- scrumaster - Mike
-- Brendan, Marten, Andrew, Dnaiel - development engineers
+- scrum master - Mike
+- development engineers - Brendan, Andrew, Daniel, Josh
+- UI/UX - Mike
+- usability - Jennie
+- scrum coach - Marten
 - Este, Liza, Jody - people
 
 ## Development
