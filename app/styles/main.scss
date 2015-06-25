@@ -143,6 +143,9 @@ body,html {
   }
   .detail-section {
     margin-bottom:15px;
+    .col-md-6 {
+      margin-bottom:15px;
+    }
   }
   .detail-title {
     color:#999;
@@ -162,6 +165,12 @@ body,html {
   }
   #back {
     cursor: pointer;
+    color: #888;
+    font-weight: 100;
+    font-size: 0.8em;
+    &:hover {
+      color:#444;
+    }
   }
 }
 
