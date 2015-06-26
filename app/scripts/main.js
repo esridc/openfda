@@ -86,7 +86,7 @@ App.prototype.selectState = function() {
 
   this.statesLayer.setStyle(function(feature) {
     //return {color: '#337ab7', stroke: '#FFF', weight: 1, fillOpacity: 0.3}; 
-    return {fillColor: '#FFF', color: '#EEE', weight: 1, fillOpacity: 0.3}; 
+    return {fillColor: '#FFF', color: '#CCC', weight: 1, fillOpacity: 0.3}; 
   });
 
   if ( this.selectedState ) {
