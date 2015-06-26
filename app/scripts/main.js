@@ -86,7 +86,7 @@ App.prototype.selectState = function() {
 
   this.statesLayer.setStyle(function(feature) {
     //return {color: '#337ab7', stroke: '#FFF', weight: 1, fillOpacity: 0.3}; 
-    return {color: '#FFF', stroke: '#EEE', weight: 1, fillOpacity: 0.3}; 
+    return {fillColor: '#FFF', color: '#EEE', weight: 1, fillOpacity: 0.3}; 
   });
 
   if ( this.selectedState ) {
@@ -94,7 +94,7 @@ App.prototype.selectState = function() {
     
     layer.setStyle({
         weight: 1,
-        color: '#1a3d88',
+        fillColor: '#1a3d88',
         dashArray: '',
         fillOpacity: 0.3
     });
@@ -127,28 +127,28 @@ App.prototype.enforcementCountByState = function(data) {
   });
 
   function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
+    return d > 1000 ? '#084594' :
+           d > 500  ? '#2171b5' :
+           d > 200  ? '#4292c6' :
+           d > 100  ? '#6baed6' :
+           d > 50   ? '#9ecae1' :
+           d > 20   ? '#c6dbef' :
+           d > 10   ? '#deebf7' :
+                      '#f7fbff';
   }
 
   this.statesLayer.setStyle(function(feature) {
     var cnt = counts[feature.properties.STATE_ABBR];
-    return {color: getColor(cnt), stroke: '#FFF', weight: 1 }; 
+    return {fillColor: getColor(cnt), color: '#EEE', weight: 0.9, fillOpacity: 0.5 }; 
   });
 
   $('#legend-title').html('Recall Enforcement Count by State');
-  $('#legend-item-1').css({'background': '#800026'});
-  $('#legend-item-2').css({'background': '#E31A1C'});
-  $('#legend-item-3').css({'background': '#FC4E2A'});
-  $('#legend-item-4').css({'background': '#FD8D3C'});
-  $('#legend-item-5').css({'background': '#FEB24C'});
-  $('#legend-item-6').css({'background': '#FFEDA0'});
+  $('#legend-item-1').css({'background': '#084594'});
+  $('#legend-item-2').css({'background': '#4292c6'});
+  $('#legend-item-3').css({'background': '#6baed6'});
+  $('#legend-item-4').css({'background': '#c6dbef'});
+  $('#legend-item-5').css({'background': '#deebf7'});
+  $('#legend-item-6').css({'background': '#f7fbff'});
   $('#legend-min').html('<10');
   $('#legend-max').html('>1,000');
   
@@ -345,9 +345,8 @@ App.prototype._wire = function() {
     
     layer.setStyle({
         weight: 1,
-        fill: '#F8F8F8',
         dashArray: '',
-        color: "#999",
+        fillColor: "#999",
         fillOpacity: 0.3
     });
 
