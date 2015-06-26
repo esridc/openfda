@@ -108,6 +108,9 @@ body,html {
   border-radius:2px;
   overflow: hidden;
   overflow-y:auto;
+  .caps {
+    text-transform:uppercase;
+  }
   hr {
     margin-top:0px;
   }
@@ -121,7 +124,7 @@ body,html {
     margin-bottom:35px;
     li {
       border-bottom: 1px solid #CFCFCF;;
-      margin-bottom: 10px;
+      padding-top: 10px;
       padding-bottom: 10px;
       color:#9A9A9A;
       .col-md-6 {
@@ -132,6 +135,15 @@ body,html {
       }
       .completed {
         color:#5DB986;
+      }
+    }
+    .list-element {
+      padding:3px;
+      &.selected {
+        background-color:#EEE;
+      }
+      &:hover {
+        background-color:#EEE;
       }
     }
   }
@@ -209,19 +221,24 @@ body,html {
 }
 
 .geocoder-control-input {
-  //background-color:#f8f8f8;
+  background-color:#f8f8f8;
+  border-bottom:1px solid #EEE;
+}
+
+.leaflet-control-zoom-in,.leaflet-control-zoom-out {
+  background-color:#f8f8f8 !important;
 }
 
 #search-helper {
   margin-top: 25px;
-  background-color:#FFF;
+  background-color:#f8f8f8;
   padding:5px;
   padding-top:4px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  //box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.65);
 }
 
 

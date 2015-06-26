@@ -10,6 +10,7 @@ var App = function(){
   });
 
   this.states = this._getStates();
+  this.stateGeoms = this._getStateGeoms();
   this.geocodeService = new L.esri.Geocoding.Services.Geocoding();
 
   //setup map and states 
@@ -37,7 +38,8 @@ App.prototype.createMap = function() {
   this.map = L.map('map').setView([38.891, -80.94], 4);
 
   L.esri.basemapLayer("Gray").addTo(this.map);
-  L.esri.basemapLayer("GrayLabels").addTo(this.map);
+  //L.esri.basemapLayer("GrayLabels").addTo(this.map);
+  L.esri.basemapLayer('OceansLabels').addTo(this.map);
 
   var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(this.map);
 
@@ -83,7 +85,8 @@ App.prototype.selectState = function() {
   $('#legend').hide();
 
   this.statesLayer.setStyle(function(feature) {
-    return {color: '#337ab7', stroke: '#FFF', weight: 1, fillOpacity: 0.3}; 
+    //return {color: '#337ab7', stroke: '#FFF', weight: 1, fillOpacity: 0.3}; 
+    return {color: '#FFF', stroke: '#EEE', weight: 1, fillOpacity: 0.3}; 
   });
 
   if ( this.selectedState ) {
@@ -183,19 +186,21 @@ App.prototype.showList = function(data, title, type) {
     $('#list-container').show();
 
     _.each(data, function(result) {
-      console.log('result', result);
+      //console.log('result', result);
+      var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
+      states = states.split(/[ ,\n]+/);
+      var statesLength = [result.state];
+      _.each( states, function(st) {
+        if ( self.states[st] ) {
+          statesLength.push(st);
+        }
+      });
 
       var el = '<li class="list-element animated slideInRight">\
           <div class="recalling-firm">'+result.recalling_firm +'</div>\
-          <div class="col-md-6">\
-            <div class="list-title">Initiation Date</div>\
-            <div class="detail-text">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+'</div>\
-          </div>\
-          <div class="col-md-6">\
-            <div class="list-title">Status</div>\
-            <div class="detail-text '+result.status.toLowerCase()+'">'+result.status+'</div>\
-          </div>\
+          <div class="detail-text caps">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+' – <span class="caps '+result.status.toLowerCase()+'">'+result.status+'</span></div>\
           <div><span class="list-title">Recalled Product Source</span>: '+self.states[result.state] +'</div>\
+          <div><span class="list-title">Number of States Impacted</span>: '+statesLength.length+'</div>\
           <div class="recall-item-description"><span class="recall-item-description-title">Description</span>: '+result.product_description +'</div>\
           <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
         </li>';
@@ -207,6 +212,14 @@ App.prototype.showList = function(data, title, type) {
       } else if ( result.classification === "Class III" ) {
         $('#unlikely-list').append(el);
       }
+    });
+
+    $('.list-element').on('mouseenter', function(e) {
+      $('.list-element').removeClass('selected');
+      $(this).addClass('selected');
+
+      var id = $(this).children('.show-details').attr('id');
+      self._drawArcs(id);
     });
 
     $('.show-details').on('click', function(e) {
@@ -313,14 +326,16 @@ App.prototype._wire = function() {
   });
 
   this.statesLayer.on('click', function(e) {
+    $('.detail-list').empty();
+
     var state = e.layer.feature.properties.STATE_ABBR;
     self._find({ text: state });
 
+    self._clearLayers();
+    self.selectedStateAbbr = state;
     self._stateSelected = true;
     self.selectedState = e;
     self.selectState();
-    
-    //self.map.removeLayer(self.statesLayer);
 
   });
 
@@ -330,8 +345,9 @@ App.prototype._wire = function() {
     
     layer.setStyle({
         weight: 1,
-        color: '#FFF',
+        fill: '#F8F8F8',
         dashArray: '',
+        color: "#999",
         fillOpacity: 0.3
     });
 
@@ -355,6 +371,125 @@ App.prototype._wire = function() {
 }
 
 
+App.prototype._clearLayers = function() {
+  
+  if ( this.arcsLayer ) {
+    this.arcsLayer.clearLayers();
+  }
+
+  if ( this.endLayer ) {
+    this.map.removeLayer(this.endLayer);
+  }
+
+  if ( this.sourceLayer ) {
+    this.map.removeLayer(this.sourceLayer);
+  }
+
+}
+
+
+App.prototype._drawArcs = function (id) {
+  var self = this;
+
+  if ( ! this.arcsLayer ) {
+    this.arcsLayer = L.geoJson().addTo( this.map );
+  }
+
+  self.arcsLayer.clearLayers();
+  self._clearLayers();
+
+  var latlngs = [];
+  _.each(this.data, function(result) {
+    if ( result.recall_number === id ) {
+      //console.log('recall distribution_pattern', result.distribution_pattern);
+      var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
+      states = states.split(/[ ,\n]+/);
+      //console.log('states', states);
+      
+      _.each(states, function(st) {
+        st = _.trim(st.toUpperCase());
+        
+        //console.log('selectedStateAbbr', self.selectedStateAbbr);
+        if ( self.stateGeoms[st] !== undefined  && st !== result.state ) {
+          
+          var start = { x: self.stateGeoms[result.state].longitude, y: self.stateGeoms[result.state].latitude };
+          var end = { x: self.stateGeoms[st].longitude, y: self.stateGeoms[st].latitude };
+          //console.log('start', start, 'end', end);
+          latlngs.push(end);
+
+          var generator = new arc.GreatCircle(start, end, {'name': 'Seattle to DC'});
+
+          var line = generator.Arc(100,{offset:10});
+          line = line.json();
+
+          self.arcsLayer.addData(line);
+          self.arcsLayer.setStyle({color: '#000', opacity: 1, weight: 0.5});
+        }
+      });
+
+      if ( latlngs.length > 0 ) {
+        var features = [];
+        _.each(latlngs, function(loc) {
+          
+          var end = {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [loc.x, loc.y]
+            }
+          };
+
+          features.push(end);
+        });
+
+        var geojsonMarkerOptions = {
+          radius: 2,
+          fillColor: "#0079c1",
+          color: "#FFF",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
+        };
+
+        self.endLayer = L.geoJson(features, {
+          pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+          }
+        }).addTo(self.map);
+      }
+
+      var source = {
+        "type": "Feature",
+        "properties": {
+          "name": result.recalling_firm,
+          "state": result.state
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [self.stateGeoms[result.state].longitude, self.stateGeoms[result.state].latitude]
+        }
+      };
+
+      function onEachFeature(feature, layer) {
+        // does this feature have a property named popupContent?
+        if (feature.properties) {
+          layer.bindPopup('<b>Recalling firm: ' + feature.properties.name + '</b><br />' + result.product_quantity + '<br /><br />' + result.product_description );
+        }
+      }
+
+      //self.arcsLayer.addData(source);
+      self.sourceLayer = L.geoJson(source, {
+          onEachFeature: onEachFeature
+      }).addTo(self.map);
+
+    }
+  });
+
+}
+
+
+
 App.prototype._find = function(data) {
   var self = this;
 
@@ -366,7 +501,7 @@ App.prototype._find = function(data) {
   
   recalls.find(options, function(results) {
     //console.log('find callback: ', results);
-    self.showList(results, "Recalls in " + self.states[data.text], 'recalls' );
+    self.showList(results, results.length + " recalls found in " + self.states[data.text], 'recalls' );
   });
 }
 
@@ -440,3 +575,229 @@ App.prototype._getStates = function() {
     "WY": "Wyoming"
   }
 };
+
+
+App.prototype._getStateGeoms = function() {
+  return {
+    "AK": {
+      "latitude":61.385,
+      "longitude":-152.2683
+    },
+    "AL": {
+      "latitude":32.799,
+      "longitude":-86.8073
+    },
+    "AR": {
+      "latitude":34.9513,
+      "longitude":-92.3809
+    },
+    "AS": {
+      "latitude":14.2417,
+      "longitude":-170.7197
+    },
+    "AZ": {
+      "latitude":33.7712,
+      "longitude":-111.3877
+    },
+    "CA": {
+      "latitude":36.17,
+      "longitude":-119.7462
+    },
+    "CO": {
+      "latitude":39.0646,
+      "longitude":-105.3272
+    },
+    "CT": {
+      "latitude":41.5834,
+      "longitude":-72.7622
+    },
+    "DC": {
+      "latitude":38.8964,
+      "longitude":-77.0262
+    },
+    "DE": {
+      "latitude":39.3498,
+      "longitude":-75.5148
+    },
+    "FL": {
+      "latitude":27.8333,
+      "longitude":-81.717
+    },
+    "GA": {
+      "latitude":32.9866,
+      "longitude":-83.6487
+    },
+    "HI": {
+      "latitude":21.1098,
+      "longitude":-157.5311
+    },
+    "IA": {
+      "latitude":42.0046,
+      "longitude":-93.214
+    },
+    "ID": {
+      "latitude":44.2394,
+      "longitude":-114.5103
+    },
+    "IL": {
+      "latitude":40.3363,
+      "longitude":-89.0022
+    },
+    "IN": {
+      "latitude":39.8647,
+      "longitude":-86.2604
+    },
+    "KS": {
+      "latitude":38.5111,
+      "longitude":-96.8005
+    },
+    "KY": {
+      "latitude":37.669,
+      "longitude":-84.6514
+    },
+    "LA": {
+      "latitude":31.1801,
+      "longitude":-91.8749
+    },
+    "MA": {
+      "latitude":42.2373,
+      "longitude":-71.5314
+    },
+    "MD": {
+      "latitude":39.0724,
+      "longitude":-76.7902
+    },
+    "ME": {
+      "latitude":44.6074,
+      "longitude":-69.3977
+    },
+    "MI": {
+      "latitude":43.3504,
+      "longitude":-84.5603
+    },
+    "MN": {
+      "latitude":45.7326,
+      "longitude":-93.9196
+    },
+    "MO": {
+      "latitude":38.4623,
+      "longitude":-92.302
+    },
+    "MP": {
+      "latitude":14.8058,
+      "longitude":145.5505
+    },
+    "MS": {
+      "latitude":32.7673,
+      "longitude":-89.6812
+    },
+    "MT": {
+      "latitude":46.9048,
+      "longitude":-110.3261
+    },
+    "NC": {
+      "latitude":35.6411,
+      "longitude":-79.8431
+    },
+    "ND": {
+      "latitude":47.5362,
+      "longitude":-99.793
+    },
+    "NE": {
+      "latitude":41.1289,
+      "longitude":-98.2883
+    },
+    "NH": {
+      "latitude":43.4108,
+      "longitude":-71.5653
+    },
+    "NJ": {
+      "latitude":40.314,
+      "longitude":-74.5089
+    },
+    "NM": {
+      "latitude":34.8375,
+      "longitude":-106.2371
+    },
+    "NV": {
+      "latitude":38.4199,
+      "longitude":-117.1219
+    },
+    "NY": {
+      "latitude":42.1497,
+      "longitude":-74.9384
+    },
+    "OH": {
+      "latitude":40.3736,
+      "longitude":-82.7755
+    },
+    "OK": {
+      "latitude":35.5376,
+      "longitude":-96.9247
+    },
+    "OR": {
+      "latitude":44.5672,
+      "longitude":-122.1269
+    },
+    "PA": {
+      "latitude":40.5773,
+      "longitude":-77.264
+    },
+    "PR": {
+      "latitude":18.2766,
+      "longitude":-66.335
+    },
+    "RI": {
+      "latitude":41.6772,
+      "longitude":-71.5101
+    },
+    "SC": {
+      "latitude":33.8191,
+      "longitude":-80.9066
+    },
+    "SD": {
+      "latitude":44.2853,
+      "longitude":-99.4632
+    },
+    "TN": {
+      "latitude":35.7449,
+      "longitude":-86.7489
+    },
+    "TX": {
+      "latitude":31.106,
+      "longitude":-97.6475
+    },
+    "UT": {
+      "latitude":40.1135,
+      "longitude":-111.8535
+    },
+    "VA": {
+      "latitude":37.768,
+      "longitude":-78.2057
+    },
+    "VI": {
+      "latitude":18.0001,
+      "longitude":-64.8199
+    },
+    "VT": {
+      "latitude":44.0407,
+      "longitude":-72.7093
+    },
+    "WA": {
+      "latitude":47.3917,
+      "longitude":-121.5708
+    },
+    "WI": {
+      "latitude":44.2563,
+      "longitude":-89.6385
+    },
+    "WV": {
+      "latitude":38.468,
+      "longitude":-80.9696
+    },
+    "WY": {
+      "latitude":42.7475,
+      "longitude":-107.2085
+    }
+  }
+}
