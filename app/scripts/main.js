@@ -38,7 +38,8 @@ App.prototype.createMap = function() {
   this.map = L.map('map').setView([38.891, -80.94], 4);
 
   L.esri.basemapLayer("Gray").addTo(this.map);
-  L.esri.basemapLayer("GrayLabels").addTo(this.map);
+  //L.esri.basemapLayer("GrayLabels").addTo(this.map);
+  L.esri.basemapLayer('OceansLabels').addTo(this.map);
 
   var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(this.map);
 
@@ -326,7 +327,7 @@ App.prototype._wire = function() {
 
   this.statesLayer.on('click', function(e) {
     $('.detail-list').empty();
-    
+
     var state = e.layer.feature.properties.STATE_ABBR;
     self._find({ text: state });
 
