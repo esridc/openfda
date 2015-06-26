@@ -39,7 +39,7 @@ App.prototype.createMap = function() {
 
   L.esri.basemapLayer("Gray").addTo(this.map);
   //L.esri.basemapLayer("GrayLabels").addTo(this.map);
-  L.esri.basemapLayer('OceansLabels').addTo(this.map);
+  //L.esri.basemapLayer('OceansLabels').addTo(this.map);
 
   var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(this.map);
 
