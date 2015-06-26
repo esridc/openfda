@@ -108,7 +108,7 @@ App.prototype.constructUI = function() {
 
   var el = '<div id="search-helper" class="leaflet-bar">Or select location on map</div>'
 
-  $('.geocoder-control input').attr('placeholder', 'Search for recalls in your state');
+  $('.geocoder-control input').attr('placeholder', 'Search for places or addresses');
   $('.geocoder-control').addClass('geocoder-control-expanded').append(el);
 
   //sizing
