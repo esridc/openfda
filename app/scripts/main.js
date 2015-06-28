@@ -11,6 +11,7 @@ var App = function(){
 
   this.states = this._getStates();
   this.stateGeoms = this._getStateGeoms();
+  //sourceCountry=USA
   this.geocodeService = new L.esri.Geocoding.Services.Geocoding();
 
   //setup map and states 
@@ -21,8 +22,8 @@ var App = function(){
 
   //initial page load aggregation call 
   recalls.count({type: 'state'}, function(data) {
-    self.enforcementCountByState(data);
-    self.showList(data, 'Recall Enforcement Count by State', 'count');
+    self.enforcementCountByState(data.results);
+    self.showList(data.results, 'Recall Enforcement Count by State', 'count');
   });
 
 };
@@ -38,13 +39,36 @@ App.prototype.createMap = function() {
   this.map = L.map('map').setView([38.891, -80.94], 4);
 
   L.esri.basemapLayer("Gray").addTo(this.map);
-  //L.esri.basemapLayer("GrayLabels").addTo(this.map);
-  //L.esri.basemapLayer('OceansLabels').addTo(this.map);
-
-  var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(this.map);
+  
+  var searchControl = new L.esri.Geocoding.Controls.Geosearch({'useMapBounds': true, 'zoomToResult': false}).addTo(this.map);
 
   searchControl.on('results', function(data){
-    self._find(data);
+    var state = data.results[0].properties.Region;
+
+    _.each(self.states, function(st, abbr) {
+      if ( st === state ) {
+        state = abbr;
+      }
+    });
+
+    $('.detail-list').empty();
+
+    self._clearLayers();
+    self.selectedStateAbbr = state;
+    self._stateSelected = true;
+    //self.selectedState = e;
+    //self.selectState();
+
+    self.statesLayer.eachFeature(function(f) {
+      if ( f.feature.properties.STATE_ABBR === state ) {
+        self.selectedState = f;
+        console.log('f', f);
+        self.selectState();
+      }
+    });
+
+    self._find({ text: state });
+
   });
 }
 
@@ -59,6 +83,21 @@ App.prototype.addStatesLayer = function() {
     style: function (feature) {
       //console.log('feature', feature);
       return {color: '#7fbbdf', stroke: '#FFF', weight: 1 };
+    }
+  }).addTo(this.map);
+}
+
+
+
+App.prototype.addKoopLayer = function() {
+  var i = 0;
+  this.koopLayer = L.esri.featureLayer('http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/FDA_Food_Recall_Enforcement/FeatureServer/0', {
+    style: function (feature) {
+      i++;
+      if ( i < 5 ) {
+        console.log('feature', feature);
+      }
+      return {fillColor: '#000', color: '#FFF', weight: 1 };
     }
   }).addTo(this.map);
 }
@@ -90,7 +129,7 @@ App.prototype.selectState = function() {
   });
 
   if ( this.selectedState ) {
-    var layer = this.selectedState.layer;
+    var layer = (this.selectedState.layer) ? this.selectedState.layer : this.selectedState;
     
     layer.setStyle({
         weight: 1,
@@ -116,7 +155,6 @@ App.prototype.selectState = function() {
 */
 App.prototype.enforcementCountByState = function(data) {
   //console.log('data', data);
-
   var keys = _.keys(this.states);
   var counts = {};
   
@@ -498,9 +536,11 @@ App.prototype._find = function(data) {
   options.location = data.text;
   options.api = 'food/enforcement.json';
   
-  recalls.find(options, function(results) {
-    //console.log('find callback: ', results);
-    self.showList(results, results.length + " recalls found in " + self.states[data.text], 'recalls' );
+  recalls.find(options, function(d) {
+    var results = d.results;
+    var meta = d.meta;
+    console.log('find callback: ', results, 'meta', meta);
+    self.showList(results, meta.results.total.toLocaleString() + " recalls found in " + self.states[data.text], 'recalls' );
   });
 }
 

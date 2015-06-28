@@ -52,7 +52,7 @@ Recalls.prototype.getData = function(url, params, callback) {
 
   $.ajax(url, params)
     .done(function(data) {
-      callback(data.results);
+      callback(data);
     })
     .error(function(err) {
       console.log('err', err);
