@@ -23,7 +23,8 @@ var App = function(){
   //initial page load aggregation call 
   recalls.count({type: 'state'}, function(data) {
     self.enforcementCountByState(data.results);
-    self.showList(data.results, 'Recall Enforcement Count by State', 'count');
+    //self.showList(data, 'Recall Enforcement Count by State', 'count');
+    self.createHomeChart(data.results, 'Recall Enforcement Count by State');
   });
 
 };
@@ -62,7 +63,6 @@ App.prototype.createMap = function() {
     self.statesLayer.eachFeature(function(f) {
       if ( f.feature.properties.STATE_ABBR === state ) {
         self.selectedState = f;
-        console.log('f', f);
         self.selectState();
       }
     });
@@ -340,6 +340,118 @@ App.prototype.showDetails = function(id, title) {
 
   $('#list-header').on('click', function() {
     self.showList(self.data, title, 'recalls');
+  });
+
+}
+
+
+
+App.prototype.createHomeChart = function(data, title) {
+  var self = this;
+  this.data = data;
+
+  $('#list').show();
+  $('#detail-tabs').hide();
+  $('#list').empty();
+  $('.detail-list').empty();
+  $('#list-header').html(title);
+  $('#detail-item').empty().hide();
+
+  var el = '<div id="home-chart"></div>';
+  $('#list').append(el);
+
+  var obj = {};
+  obj.features = [];
+  obj.fields = [
+    {
+      'name': 'state',
+      'type': 'esriFieldTypeString',
+      'alias': 'state'
+    },
+    {
+      'name': 'count',
+      'type': 'esriFieldTypeString',
+      'alias': 'count'
+    }
+  ]
+
+  _.each(data, function(st) {
+    var feature = { 
+      attributes: {
+        'state': st.term,
+        'count': st.count
+      }
+    }
+
+    if ( st.term.toUpperCase() !== 'BC' && st.term.toUpperCase() !== 'PQ' && st.term.toUpperCase() !== 'ON' && st.term.toUpperCase() !== 'PR' ) {
+      obj.features.push(feature);
+    }
+  });
+
+
+  var chart = new Cedar({"type": "bar-horizontal"});
+
+  var dataset = {
+    "data": obj,
+    "mappings":{
+      "x": {"field":"count","label":"count"},
+      "y": {"field":"state","label":"state"}
+    }
+  };
+  //assign to the chart
+  chart.dataset = dataset;
+  
+  // fix placement of axes labels
+  chart.override = {
+    "height": 440,
+    "axes": [
+      { 
+        "titleOffset": 0,
+        "title": "",
+        "properties": {
+          "labels": { "fontSize": {"value": 9} }
+        }
+      },
+      { 
+        "titleOffset": 40,
+        "title": "",
+        "properties": {
+          "labels": { "fontSize": {"value": 9} }
+        }
+      }
+    ],
+    "marks": [
+      {"properties": 
+        {
+          "hover": {"fill": {"value": "#4292c6"}},
+          "update": {"fill": {"value": "#2171b5"}, "opacity": {"value": 0.5}}
+        }
+      }
+    ]
+  };
+
+  //show the chart
+  chart.show({
+    elementId: "#home-chart"
+  });
+
+  chart.on('click', function(e, d) {
+    var selected = d.state.toUpperCase();
+
+    $('.detail-list').empty();
+
+    self._clearLayers();
+    self.selectedStateAbbr = selected;
+    self._stateSelected = true;
+    
+    self.statesLayer.eachFeature(function(f) {
+      if ( f.feature.properties.STATE_ABBR === selected ) {
+        self.selectedState = f;
+        self.selectState();
+      }
+    });
+
+    self._find({ text: selected });
   });
 
 }
