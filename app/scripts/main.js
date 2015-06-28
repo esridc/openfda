@@ -233,12 +233,17 @@ App.prototype.showList = function(data, title, type) {
           statesLength.push(st);
         }
       });
+      statesLength = statesLength.length; 
+
+      if ( _.contains(states, 'nationwide') || _.contains(states, 'Nationwide') ) {
+        statesLength = 50;
+      }
 
       var el = '<li class="list-element animated slideInRight">\
           <div class="recalling-firm">'+result.recalling_firm +'</div>\
           <div class="detail-text caps">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+' – <span class="caps '+result.status.toLowerCase()+'">'+result.status+'</span></div>\
           <div><span class="list-title">Recalled Product Source</span>: '+self.states[result.state] +'</div>\
-          <div><span class="list-title">Number of States Impacted</span>: '+statesLength.length+'</div>\
+          <div><span class="list-title">Number of States Impacted</span>: '+statesLength+'</div>\
           <div class="recall-item-description"><span class="recall-item-description-title">Description</span>: '+result.product_description +'</div>\
           <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
         </li>';
@@ -441,7 +446,11 @@ App.prototype._drawArcs = function (id) {
       //console.log('recall distribution_pattern', result.distribution_pattern);
       var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
       states = states.split(/[ ,\n]+/);
+      
       //console.log('states', states);
+      if ( _.contains(states, 'nationwide') || _.contains(states, 'Nationwide') ) {
+        states = ['AK','AL','AR','AS','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY']
+      }
       
       _.each(states, function(st) {
         st = _.trim(st.toUpperCase());
