@@ -24,7 +24,7 @@ var App = function(){
   recalls.count({type: 'state'}, function(data) {
     self.enforcementCountByState(data.results);
     //self.showList(data, 'Recall Enforcement Count by State', 'count');
-    self.createHomeChart(data, 'Recall Enforcement Count by State');
+    self.createHomeChart(data.results, 'Recall Enforcement Count by State');
   });
 
 };
@@ -63,7 +63,6 @@ App.prototype.createMap = function() {
     self.statesLayer.eachFeature(function(f) {
       if ( f.feature.properties.STATE_ABBR === state ) {
         self.selectedState = f;
-        console.log('f', f);
         self.selectState();
       }
     });
@@ -438,6 +437,20 @@ App.prototype.createHomeChart = function(data, title) {
 
   chart.on('click', function(e, d) {
     var selected = d.state.toUpperCase();
+
+    $('.detail-list').empty();
+
+    self._clearLayers();
+    self.selectedStateAbbr = selected;
+    self._stateSelected = true;
+    
+    self.statesLayer.eachFeature(function(f) {
+      if ( f.feature.properties.STATE_ABBR === selected ) {
+        self.selectedState = f;
+        self.selectState();
+      }
+    });
+
     self._find({ text: selected });
   });
 
