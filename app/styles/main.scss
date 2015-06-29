@@ -116,6 +116,10 @@ body,html {
   border-radius:2px;
   overflow: hidden;
   overflow-y:auto;
+  #filter-container {
+    margin-top: -30px;
+    margin-bottom: 8px;
+  }
   #home-chart {
     margin-top:-25px;
   }
@@ -188,6 +192,7 @@ body,html {
   }
   #detail-item {
     margin-bottom:40px;
+    margin-top:-30px;
   }
   .detail-section {
     margin-bottom:15px;
@@ -299,6 +304,10 @@ body,html {
 
 //mobile
 @media screen and (max-width: 768px) {
+
+  .tagline {
+    display: none;
+  }
 
   .leaflet-control-zoom-in, .leaflet-control-zoom-out {
     display: none !important;

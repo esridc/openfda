@@ -32,10 +32,20 @@ Recalls.prototype.count = function(options, cb) {
 *
 */
 Recalls.prototype.find = function(options, cb) {
-  console.log('find: ', options);
+  //console.log('find: ', options);
 
   var api = options.api || this.api;
-  var url = this.base_url + api + '?limit=100&api_key=' + this.api_key + '&search=distribution_pattern=' + options.location;
+  var url;
+
+  if ( options.date ) {
+    url = this.base_url + api + '?limit=100&api_key=' + this.api_key + '&search=distribution_pattern=' + options.location + '+AND+report_date:['+options.date[0]+'+TO+'+options.date[1]+']+AND+classification:"'+options.classification+'"';
+  } else {
+    url = this.base_url + api + '?limit=100&api_key=' + this.api_key + '&search=distribution_pattern=' + options.location + '+AND+classification:"'+options.classification+'"';
+  }
+
+  if ( options.status ) {
+    url = url + '+AND+status:' + options.status;
+  }
 
   this.getData(url, {}, function(data) {
     cb(data);
@@ -45,7 +55,7 @@ Recalls.prototype.find = function(options, cb) {
 
 
 Recalls.prototype.getData = function(url, params, callback) {
-  console.log('url: ', url);
+  //console.log('url: ', url);
 
   params.type = 'GET';
   params.dataType = 'json';
@@ -56,6 +66,9 @@ Recalls.prototype.getData = function(url, params, callback) {
     })
     .error(function(err) {
       console.log('err', err);
+      if ( err.status === 404 && err.responseJSON) {
+        callback(err.responseJSON.error);
+      }
     });
 
 }
