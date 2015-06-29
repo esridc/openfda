@@ -388,4 +388,15 @@ body,html {
   .nav-tabs li {
     font-size: 0.65em !important;
   }
+
+  #legend, #census {
+    right:0px;
+    left:0px;
+    bottom:0px;
+  }
+  #census {
+    #legend-title {
+      font-size: 0.7em;
+    }
+  }
 }
