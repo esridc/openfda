@@ -28,6 +28,14 @@ body,html {
   width:100%;
 }
 
+.bold {
+  font-weight: 500;
+}
+
+.light {
+  font-weight: 300;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .footer {
   padding-left: 15px;
@@ -120,6 +128,9 @@ body,html {
   ul#list {
     margin-top:-10px;
   }
+  .nav-tabs li {
+    font-size: 0.85em;
+  }
   ul#list,ul#danger-list,ul#slight-list,ul#unlikely-list {
     list-style: none;
     padding-left: 0px;
@@ -193,7 +204,7 @@ body,html {
   #close-list {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 5px;
     color:#444;
     :hover {
       cursor: pointer;
