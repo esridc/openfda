@@ -9,10 +9,11 @@ var App = function(){
     NProgress.done();
   });
 
+  $('#list').hide();
+
+  this.searchOptions = {};
   this.states = this._getStates();
   this.stateGeoms = this._getStateGeoms();
-  //sourceCountry=USA
-  this.geocodeService = new L.esri.Geocoding.Services.Geocoding();
 
   //setup map and states 
   this.createMap();
@@ -23,7 +24,6 @@ var App = function(){
   //initial page load aggregation call 
   recalls.count({type: 'state'}, function(data) {
     self.enforcementCountByState(data.results);
-    //self.showList(data, 'Recall Enforcement Count by State', 'count');
     self.createHomeChart(data.results, 'Recall Enforcement Count by State');
   });
 
@@ -67,7 +67,8 @@ App.prototype.createMap = function() {
       }
     });
 
-    self._find({ text: state });
+    self.searchOptions.text = state;
+    self._find();
 
   });
 }
@@ -95,7 +96,7 @@ App.prototype.addKoopLayer = function() {
     style: function (feature) {
       i++;
       if ( i < 5 ) {
-        console.log('feature', feature);
+        //console.log('feature', feature);
       }
       return {fillColor: '#000', color: '#FFF', weight: 1 };
     }
@@ -201,110 +202,79 @@ App.prototype.enforcementCountByState = function(data) {
 */ 
 App.prototype.showList = function(data, title, type) {
   var self = this;
-  console.log('data', data);
-  this.data = data;
-
+  
   //$('#list-container').show();
   $('#list').empty();
-  $('.detail-list').empty();
   $('#list-header').html(title);
   $('#detail-item').empty().hide();
-
-  var danger = 0;
-  var slight = 0;
-  var unlikely = 0;
-
-  if ( type === 'count' ) {
-    $('#list').show();
-    $('#detail-tabs').hide();
-    _.each(data, function(result) {
-      var el = '<li class="list-element">'+self.states[result.term.toUpperCase()]+': '+result.count.toLocaleString()+'</li>';
-      $('#list').append(el);
-    });
-  } else if ( type === 'recalls' ) {
-    
-    $('#list').hide();
-    $('#detail-tabs').show();
-    $('#list-container').show();
-
-    _.each(data, function(result) {
-      //console.log('result', result);
-      var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
-      states = states.split(/[ ,\n]+/);
-      var statesLength = [result.state];
-      _.each( states, function(st) {
-        if ( self.states[st] ) {
-          statesLength.push(st);
-        }
-      });
-      statesLength = statesLength.length; 
-
-      if ( _.contains(states, 'nationwide') || _.contains(states, 'Nationwide') ) {
-        statesLength = 50;
-      }
-
-      var el = '<li class="list-element animated slideInRight">\
-          <div class="recalling-firm">'+result.recalling_firm +'</div>\
-          <div class="detail-text caps">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+' – <span class="caps '+result.status.toLowerCase()+'">'+result.status+'</span></div>\
-          <div><span class="list-title">Recalled Product Source</span>: '+self.states[result.state] +'</div>\
-          <div><span class="list-title">Number of States Impacted</span>: '+statesLength+'</div>\
-          <div class="recall-item-description"><span class="recall-item-description-title">Description</span>: '+result.product_description +'</div>\
-          <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
-        </li>';
-
-      if ( result.classification === "Class I" ) {
-        danger++;
-        $('#danger-list').append(el);
-      } else if ( result.classification === "Class II" ) {
-        slight++;
-        $('#slight-list').append(el);
-      } else if ( result.classification === "Class III" ) {
-        unlikely++;
-        $('#unlikely-list').append(el);
-      }
-    });
-
-    $('#danger-count').html('(' + danger + ')');
-    $('#slight-count').html('(' + slight + ')');
-    $('#unlikely-count').html('(' + unlikely + ')');
-
-    $('.list-element').on('mouseenter', function(e) {
-      $('.list-element').removeClass('selected');
-      $(this).addClass('selected');
-
-      var id = $(this).children('.show-details').attr('id');
-      self._drawArcs(id);
-    });
-
-    $('.show-details').on('click', function(e) {
-      var id = e.target.id;
-      self.showDetails(id, title);
-    });
-
-    $('#overview').on('click', function(e) {
-      if ( self.arcsLayer ) {
-        self.arcsLayer.clearLayers();
-        self._clearLayers();
-      }
-      self._stateSelected = false;
-      self.enforcementCountByState(self.enforceData);
-      self.createHomeChart(self.enforceData, 'Recall Enforcement Count by State');
-    });
-
+  $('#detail-tabs').show();
+  $('#list-container').show();
+  
+  if ( data.message ) {
+    if ( data.classification === "Class+I" ) {
+      $('#danger-list').append('<div class="no-results">'+data.message+'</div>');
+      $('#danger-count').html('(0)');
+    } else if ( data.classification === "Class+II" ) {
+      $('#slight-list').append('<div class="no-results">'+data.message+'</div>');
+      $('#slight-count').html('(0)');
+    } else if ( data.classification === "Class+III" ) {
+      $('#unlikely-list').append('<div class="no-results">'+data.message+'</div>');
+      $('#unlikely-count').html('(0)');
+    }
+    return;
   }
+
+  _.each(data.results, function(result) {
+    //console.log('result', result);
+    var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
+    states = states.split(/[ ,\n]+/);
+    var statesLength = [result.state];
+    _.each( states, function(st) {
+      if ( self.states[st] ) {
+        statesLength.push(st);
+      }
+    });
+    statesLength = statesLength.length; 
+
+    if ( _.contains(states, 'nationwide') || _.contains(states, 'Nationwide') ) {
+      statesLength = 50;
+    }
+
+    var el = '<li class="list-element animated slideInRight">\
+        <div class="recalling-firm">'+result.recalling_firm +'</div>\
+        <div class="detail-text caps">'+moment(result.recall_initiation_date, "YYYYMMDD").format('MMMM DD, YYYY')+' – <span class="caps '+result.status.toLowerCase()+'">'+result.status+'</span></div>\
+        <div><span class="list-title">Recalled Product Source</span>: '+self.states[result.state] +'</div>\
+        <div><span class="list-title">Number of States Impacted</span>: '+statesLength+'</div>\
+        <div class="recall-item-description"><span class="recall-item-description-title">Description</span>: '+result.product_description +'</div>\
+        <div class="show-details" id="'+result.recall_number+'"><i class="glyphicon glyphicon-search"></i> Show Details</div>\
+      </li>';
+
+    if ( data.classification === "Class+I" ) {
+      $('#danger-list').append(el);
+      $('#danger-count').html('(' + data.meta.results.total + ')');
+    } else if ( data.classification === "Class+II" ) {
+      $('#slight-list').append(el);
+      $('#slight-count').html('(' + data.meta.results.total + ')');
+    } else if ( data.classification === "Class+III" ) {
+      $('#unlikely-list').append(el);
+      $('#unlikely-count').html('(' + data.meta.results.total + ')');
+    }
+  });
+
 }
 
 
 
-App.prototype.showDetails = function(id, title) {
+App.prototype.showDetails = function(id) {
   var self = this;
 
   _.each(this.data, function(result) {
     if ( result.recall_number === id ) {
       $('#detail-tabs').hide();
-      $('#detail-item').empty().show();
+      $('#list-header').hide();
+      $('#list-detail-header').show();
 
-      $('#list-header').html('<span class="glyphicon glyphicon-chevron-left" id="back"></span> '+ result.recalling_firm);
+      $('#list-detail-header').html('<span class="glyphicon glyphicon-chevron-left" id="back"></span> '+ result.recalling_firm);
 
       var html = '<div>\
           <div class="detail-section">\
@@ -355,12 +325,16 @@ App.prototype.showDetails = function(id, title) {
           </div>\
         </div>'
 
+      $('#detail-item').show();
       $('#detail-item').append(html);
     }
   });
 
-  $('#list-header').on('click', function() {
-    self.showList(self.data, title, 'recalls');
+  $('#list-detail-header').on('click', function() {
+    $('#list-detail-header').hide();
+    $('#detail-item').hide();
+    $('#detail-tabs').show();
+    $('#list-header').show();
   });
 
 }
@@ -472,7 +446,8 @@ App.prototype.createHomeChart = function(data, title) {
       }
     });
 
-    self._find({ text: selected });
+    self.searchOptions.text = selected;
+    self._find();
   });
 
 }
@@ -492,20 +467,12 @@ App.prototype._wire = function() {
     $('.geocoder-control').addClass('geocoder-control-expanded');
   });
 
-  //reverse geocoding
-  this.map.on('click', function(e) {
-    self.geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
-      if ( result ) {
-        L.marker(result.latlng).addTo(self.map).bindPopup(result.address.Match_addr).openPopup();
-      }
-    });
-  });
-
   this.statesLayer.on('click', function(e) {
     $('.detail-list').empty();
 
     var state = e.layer.feature.properties.STATE_ABBR;
-    self._find({ text: state });
+    self.searchOptions.text = state;
+    self._find();
 
     self._clearLayers();
     self.selectedStateAbbr = state;
@@ -543,7 +510,75 @@ App.prototype._wire = function() {
     $('#list-container').hide();
   });
 
+  $('#filter-by-date').on('change', function(e) {
+    var val = $(e.target).val();
+    var start; 
+    
+    if ( val === "6 Months" ) {
+      start = moment().subtract(182, 'day').format('YYYYMMDD');
+    } else if ( val === "1 Year") {
+      start = moment().subtract(365, 'day').format('YYYYMMDD');
+    } else if ( val === "3 Years") {
+      start = moment().subtract(1095, 'day').format('YYYYMMDD');
+    } else {
+      start = null;
+    }
+
+    var end = moment().format('YYYYMMDD');
+    
+    self.searchOptions.date = (start) ? [start, end] : null;
+    self._find();
+  });
+
+
+  $('#filter-by-status').on('change', function(e) {
+    var val = $(e.target).val();
+    var stati = ['OnGoing', 'Completed', 'Terminated', 'Pending'];
+    if  ( _.contains(stati, val) ) {
+      val = val;
+    } else {
+      val = null;
+    }
+
+    self.searchOptions.status = val;
+    self._find();
+  });
+
 }
+
+
+
+App.prototype._wireList = function() {
+  var self = this;
+  $('.list-element').off('mouseenter'); 
+  $('.show-details').off('click');
+  $('#overview').off('click');
+
+  $('.list-element').on('mouseenter', function(e) {
+    $('.list-element').removeClass('selected');
+    $(this).addClass('selected');
+
+    var id = $(this).children('.show-details').attr('id');
+    self._drawArcs(id);
+  });
+
+  $('.show-details').on('click', function(e) {
+    var id = e.target.id;
+    self.showDetails(id);
+  });
+
+  $('#overview').on('click', function(e) {
+    if ( self.arcsLayer ) {
+      self.arcsLayer.clearLayers();
+      self._clearLayers();
+    }
+    self._stateSelected = false;
+    self.enforcementCountByState(self.enforceData);
+    self.createHomeChart(self.enforceData, 'Recall Enforcement Count by State');
+    $('#legend').show();
+  });
+}
+
 
 
 App.prototype._clearLayers = function() {
@@ -576,11 +611,9 @@ App.prototype._drawArcs = function (id) {
   var latlngs = [];
   _.each(this.data, function(result) {
     if ( result.recall_number === id ) {
-      //console.log('recall distribution_pattern', result.distribution_pattern);
       var states = result.distribution_pattern; //.replace(/[\n\r]+/g, '');
       states = states.split(/[ ,\n]+/);
       
-      //console.log('states', states);
       if ( _.contains(states, 'nationwide') || _.contains(states, 'Nationwide') ) {
         states = ['AK','AL','AR','AS','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY']
       }
@@ -671,17 +704,32 @@ App.prototype._drawArcs = function (id) {
 
 App.prototype._find = function(data) {
   var self = this;
+  $('.detail-list').empty();
+  self._clearLayers();
 
+  this.data = [];
+
+  var data = this.searchOptions;
   var options = {};
   options.location = data.text;
+  options.date = (data.date) ? data.date : null;
+  options.status = (data.status) ? data.status : null;
   options.api = 'food/enforcement.json';
   
-  recalls.find(options, function(d) {
-    var results = d.results;
-    var meta = d.meta;
-    //console.log('find callback: ', results, 'meta', meta);
-    self.showList(results, self.states[data.text] + '<span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
+  var classes = ['Class+I', 'Class+II', 'Class+III'];
+  _.each(classes, function(c, i) {
+    options.classification = c;
+    recalls.find(options, function(results) {
+      results.classification = c;
+      self.showList(results, self.states[data.text] + '<span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
+      
+      self.data = _.union(self.data, results.results);
+      self._wireList();
+
+    });
+
   });
+
 }
 
 

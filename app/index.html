@@ -33,7 +33,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="">
         <div class="navbar-header">
-          <span class="navbar-brand" style="margin-top:0px"><span class="bold" style="margin-right:15px">GSA 18F Prototype</span> <span class="light">Find recalled food products in your state.</span></span>
+          <span class="navbar-brand" style="margin-top:0px"><span class="bold" style="margin-right:15px">GSA 18F Prototype</span> <span class="tagline light">Find recalled food products in your state.</span></span>
         </div>
         <span class="pull-right" id="logo">
           <span class="navbar-brand"><img src="/openfda/images/esri.png" style="height:30px; margin-top:-5px; margin-left:-10px"></img></span>
@@ -46,16 +46,33 @@
     <div id="list-container">
       <div id="close-list"><i class="glyphicon glyphicon-remove-circle"></i></div>
       <h4 id="list-header"></h4>
+      <h4 id="list-detail-header"></h4>
       <hr />
       <ul id="list"></ul>
 
       <div id="detail-tabs">
 
+        <div id="filter-container">
+          <select id="filter-by-date">
+            <option>Date Range</option>
+            <option>6 Months</option>
+            <option>1 Year</option>
+            <option>3 Years</option>
+          </select>
+          <select id="filter-by-status">
+            <option>Status</option>
+            <option>OnGoing</option>
+            <option>Completed</option>
+            <option>Terminated</option>
+            <option>Pending</option>
+          </select>
+        </div>
+
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Dangerous <span id="danger-count"><span></a></li>
           <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Slight <span id="slight-count"><span></a></li>
-          <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Unlikely Threat <span id="unlikely-count"><span></a></li>
+          <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Unlikely <span id="unlikely-count"><span></a></li>
         </ul>
 
         <!-- Tab panes -->
