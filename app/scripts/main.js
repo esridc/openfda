@@ -210,6 +210,10 @@ App.prototype.showList = function(data, title, type) {
   $('#list-header').html(title);
   $('#detail-item').empty().hide();
 
+  var danger = 0;
+  var slight = 0;
+  var unlikely = 0;
+
   if ( type === 'count' ) {
     $('#list').show();
     $('#detail-tabs').hide();
@@ -249,13 +253,20 @@ App.prototype.showList = function(data, title, type) {
         </li>';
 
       if ( result.classification === "Class I" ) {
+        danger++;
         $('#danger-list').append(el);
       } else if ( result.classification === "Class II" ) {
+        slight++;
         $('#slight-list').append(el);
       } else if ( result.classification === "Class III" ) {
+        unlikely++;
         $('#unlikely-list').append(el);
       }
     });
+
+    $('#danger-count').html('(' + danger + ')');
+    $('#slight-count').html('(' + slight + ')');
+    $('#unlikely-count').html('(' + unlikely + ')');
 
     $('.list-element').on('mouseenter', function(e) {
       $('.list-element').removeClass('selected');
@@ -268,6 +279,16 @@ App.prototype.showList = function(data, title, type) {
     $('.show-details').on('click', function(e) {
       var id = e.target.id;
       self.showDetails(id, title);
+    });
+
+    $('#overview').on('click', function(e) {
+      if ( self.arcsLayer ) {
+        self.arcsLayer.clearLayers();
+        self._clearLayers();
+      }
+      self._stateSelected = false;
+      self.enforcementCountByState(self.enforceData);
+      self.createHomeChart(self.enforceData, 'Recall Enforcement Count by State');
     });
 
   }
@@ -651,8 +672,6 @@ App.prototype._drawArcs = function (id) {
 App.prototype._find = function(data) {
   var self = this;
 
-  console.log('_find data: ', data);
-  
   var options = {};
   options.location = data.text;
   options.api = 'food/enforcement.json';
@@ -660,8 +679,8 @@ App.prototype._find = function(data) {
   recalls.find(options, function(d) {
     var results = d.results;
     var meta = d.meta;
-    console.log('find callback: ', results, 'meta', meta);
-    self.showList(results, meta.results.total.toLocaleString() + " recalls found in " + self.states[data.text], 'recalls' );
+    //console.log('find callback: ', results, 'meta', meta);
+    self.showList(results, self.states[data.text] + '<span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
   });
 }
 
