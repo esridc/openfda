@@ -300,8 +300,38 @@ body,html {
 //mobile
 @media screen and (max-width: 768px) {
 
+  .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    display: none !important;
+  }
+
   .geocoder-control.leaflet-control {
-    top:-70px;
+    top:-25px;
+    left:-10px;
+    width:100% !important;
+    border:none;
+    box-shadow:none;
+  }
+
+  .geocoder-control-input {
+    border-bottom:none !important;
+    border:none !important;
+    box-shadow: none !important;
+  }
+
+  #search-helper {
+    background-color:#f8f8f8;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    box-shadow: none !important;
+    border:none !important;
+  }
+
+
+  #map .leaflet-top {
+    right: 0px;
+    left:0px;
   }
 
   #legend {
@@ -313,11 +343,15 @@ body,html {
 
   #list-container {
     display: none;
-    left: 20px;
-    right: 20px;
-    bottom:30px;
+    left: 0px;
+    right: 0px;
+    bottom:0px;
     width: auto;
-    top:135px;
+    top:100px;
+  }
+
+  .leaflet-bottom.leaflet-right {
+    display: none !important;
   }
 
   .nav-tabs li {
