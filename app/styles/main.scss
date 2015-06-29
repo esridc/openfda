@@ -138,7 +138,7 @@ body,html {
     margin-top:-10px;
   }
   .nav-tabs li {
-    font-size: 0.85em;
+    font-size: 0.72em;
   }
   ul#list,ul#danger-list,ul#slight-list,ul#unlikely-list {
     list-style: none;
@@ -270,7 +270,7 @@ body,html {
 }
 
 
-#legend {
+#legend, #census {
   width: 100%;
   bottom: 0px;
   height: 44px;
@@ -285,7 +285,7 @@ body,html {
   border-radius:2px;
   overflow: hidden;
   #legend-title {
-    margin-top:8px;
+    margin-top:5px;
     font-size: 0.8em;
   }
   #legend-min,#legend-max {
@@ -304,6 +304,23 @@ body,html {
   .legend-item {
     height:6px;
     opacity:0.6;
+  }
+}
+
+#census {
+  display:none;
+  #total-pop {
+    font-weight: 600;
+  }
+  #percent-of-total {
+    font-weight: 400;
+    font-size: 2.3em;
+    text-align: right;
+  }
+  #of-pop {
+    font-size: 0.76em;
+    line-height: 0.9em;
+    margin-top: 8px;
   }
 }
 
@@ -348,7 +365,7 @@ body,html {
     left:0px;
   }
 
-  #legend {
+  #legend, #census {
     bottom:30px;
     left: 20px;
     right: 20px;
@@ -369,6 +386,17 @@ body,html {
   }
 
   .nav-tabs li {
-    font-size: 0.8em;
+    font-size: 0.65em !important;
+  }
+
+  #legend, #census {
+    right:0px;
+    left:0px;
+    bottom:0px;
+  }
+  #census {
+    #legend-title {
+      font-size: 0.7em;
+    }
   }
 }
