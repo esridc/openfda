@@ -584,6 +584,7 @@ App.prototype._wireList = function() {
     self.enforcementCountByState(self.enforceData);
     self.createHomeChart(self.enforceData, 'Recall Enforcement Count by State');
     $('#legend').show();
+    $('#census').hide();
   });
 }
 
@@ -703,9 +704,35 @@ App.prototype._drawArcs = function (id) {
           onEachFeature: onEachFeature
       }).addTo(self.map);
 
+
+      self._censusStats(states);
     }
   });
 
+}
+
+
+
+App.prototype._censusStats = function(states) {
+  var totalPop = 0;
+  states.push(this.selectedStateAbbr);
+
+  this.statesLayer.eachFeature(function(f) {
+    if ( _.contains(states, f.feature.properties.STATE_ABBR)) {
+      totalPop += f.feature.properties.POP2012;
+    }
+  });
+
+  formattedPop = totalPop.toLocaleString();
+
+  $('#census').show();
+  $('#total-pop').html(formattedPop);
+
+  //percent of total 
+  var total = 313129017;
+  var percent = parseInt((totalPop / total) * 100);
+
+  $('#percent-of-total').html(percent + '%');
 }
 
 
@@ -729,7 +756,7 @@ App.prototype._find = function(data) {
     options.classification = c;
     recalls.find(options, function(results) {
       results.classification = c;
-      self.showList(results, self.states[data.text] + '<span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
+      self.showList(results, self.states[data.text] + ' Recall List <span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
       
       self.data = _.union(self.data, results.results);
       self._wireList();
