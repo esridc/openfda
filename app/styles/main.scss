@@ -115,10 +115,15 @@ body,html {
   bottom:70px;
   border-radius:2px;
   overflow: hidden;
-  overflow-y:auto;
+  //overflow-y:auto;
   #filter-container {
     margin-top: -30px;
     margin-bottom: 8px;
+  }
+  .detail-list {
+    height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
   }
   #home-chart {
     margin-top:-25px;

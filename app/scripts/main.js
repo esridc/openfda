@@ -550,6 +550,14 @@ App.prototype._wire = function() {
 
 App.prototype._wireList = function() {
   var self = this;
+
+  //list height 
+  var liTop = $('.detail-list').offset().top;
+  var containerTop = $('#list-container').offset().top;
+  var height = $('#list-container').height();
+  $('.detail-list').css({'height': height- (liTop - containerTop) + 10 + 'px'});
+
+
   $('.list-element').off('mouseenter'); 
   $('.show-details').off('click');
   $('#overview').off('click');
