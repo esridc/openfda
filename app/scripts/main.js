@@ -549,6 +549,16 @@ App.prototype._wire = function() {
     self._find();
   });
 
+
+  $('#download-button').on('click', function(e) {
+    
+    NProgress.start();
+    e.stopPropagation();
+
+    setTimeout(function() {
+      NProgress.done();
+    },3000);
+  });
 }
 
 
@@ -773,6 +783,26 @@ App.prototype._censusStats = function(states) {
 
 
 
+App.prototype._updateDownloadUrl = function(options) {
+  //console.log('optiosn', options);
+
+  var url = 'http://koop-fda-1504637322.us-east-1.elb.amazonaws.com/FDA.csv';
+  var where; 
+
+  if ( options.date ) {
+    where = encodeURI("distribution_pattern like '%"+options.location+"%' AND report_date > "+options.date[0]);
+  } else {
+    where = encodeURI("distribution_pattern like '%"+options.location+"%'");
+  }
+
+  url = url + '?where=' + where;
+
+  $('#download-button').prop('href', url);
+
+}
+
+
+
 App.prototype._find = function(data) {
   var self = this;
   $('.detail-list').empty();
@@ -787,7 +817,9 @@ App.prototype._find = function(data) {
   options.date = (data.date) ? data.date : null;
   options.status = (data.status) ? data.status : null;
   options.api = 'food/enforcement.json';
-  
+    
+  this._updateDownloadUrl(options);
+
   var classes = ['Class+I', 'Class+II', 'Class+III'];
   _.each(classes, function(c, i) {
     options.classification = c;

@@ -119,6 +119,19 @@ body,html {
   #filter-container {
     margin-top: -30px;
     margin-bottom: 8px;
+    position:relative;
+  }
+  #download-button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: 1.2em;
+    color: #444;
+    display: block;
+    &:hover {
+      color:#000;
+      cursor:pointer;
+    }
   }
   .detail-list {
     height: 200px;
