@@ -33,6 +33,7 @@ We are using Huboard for our backlog -
 
 * Install: `npm install` and `bower install`
 * Run locally: `gulp serve`
+* Watch files + automatically run tests: `gulp watch`
 * Build: `gulp build`
 * Deploy to gh-pages: `gulp deploy`
 
