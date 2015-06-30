@@ -115,10 +115,6 @@ App.prototype.constructUI = function() {
   $('.geocoder-control input').attr('placeholder', 'Search for places or addresses');
   $('.geocoder-control').addClass('geocoder-control-expanded').append(el);
 
-  //sizing
-  var height = $(window).height();
-  //$('#list-container').css({'height': height - });
-
 }
 
 
@@ -796,6 +792,8 @@ App.prototype._updateDownloadUrl = function(options) {
   }
 
   url = url + '?where=' + where;
+
+  this.downloadUrl = url;
 
   $('#download-button').prop('href', url);
 
