@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "gulp-gh-pages": "^0.5.2",
-    "gulp-mocha": "^2.1.2",
     "jasmine-core": "^2.3.4",
     "karma": "^0.12.37",
     "karma-beep-reporter": "^0.1.4",
