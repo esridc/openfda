@@ -470,6 +470,10 @@ App.prototype._wire = function() {
 
   this.statesLayer.on('click', function(e) {
     $('.detail-list').empty();
+    $('#list-detail-header').hide();
+    $('#detail-item').hide();
+    $('#detail-tabs').show();
+    $('#list-header').show();
 
     var state = e.layer.feature.properties.STATE_ABBR;
     self.searchOptions.text = state;
