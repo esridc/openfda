@@ -11,7 +11,10 @@ var App = function(){
 
   $('#list').hide();
 
-  this.searchOptions = {};
+  this.searchOptions = {
+    skip: 0
+  };
+
   this.states = this._getStates();
   this.stateGeoms = this._getStateGeoms();
 
@@ -379,7 +382,9 @@ App.prototype.createHomeChart = function(data, title) {
     }
 
     if ( st.term.toUpperCase() !== 'BC' && st.term.toUpperCase() !== 'PQ' && st.term.toUpperCase() !== 'ON' && st.term.toUpperCase() !== 'PR' ) {
-      obj.features.push(feature);
+      if ( st.term.toUpperCase() !== 'KS' && st.term.toUpperCase() !== 'MT' && st.term.toUpperCase() !== 'DC' && st.term.toUpperCase() !== 'WY' ) {
+        obj.features.push(feature);
+      }
     }
   });
 
@@ -398,7 +403,7 @@ App.prototype.createHomeChart = function(data, title) {
   
   // fix placement of axes labels
   chart.override = {
-    "height": 440,
+    "height": 410,
     "axes": [
       { 
         "titleOffset": 0,
@@ -561,6 +566,7 @@ App.prototype._wireList = function() {
   $('.list-element').off('mouseenter'); 
   $('.show-details').off('click');
   $('#overview').off('click');
+  $('.detail-list').off('scroll');
 
   $('.list-element').on('mouseenter', function(e) {
     $('.list-element').removeClass('selected');
@@ -577,7 +583,6 @@ App.prototype._wireList = function() {
 
   $('#overview').on('click', function(e) {
     if ( self.arcsLayer ) {
-      self.arcsLayer.clearLayers();
       self._clearLayers();
     }
     self._stateSelected = false;
@@ -586,6 +591,37 @@ App.prototype._wireList = function() {
     $('#legend').show();
     $('#census').hide();
   });
+
+  $('.detail-list').on('scroll', function() {
+    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+      self._clearLayers();
+
+      var id = $(this).attr('id');
+      var classification;
+      
+      if ( id === "danger-list" ) {
+        classification = 'Class+I';
+      }
+      if ( id === "slight-list" ) {
+        classification = 'Class+II';
+      }
+      if ( id === "unlikely-list" ) {
+        classification = 'Class+III';
+      }
+
+      self.searchOptions.classification = classification;
+
+      var skip = self.searchOptions.skip; //self.meta[classification].results.skip;
+      var max = self.meta[classification].results.total;
+      var limit = self.meta[classification].results.limit;
+
+      //console.log('skip', skip, 'limit', limit, 'max', max);
+      if ( (skip + limit) < (max + limit) ) {
+        self.searchOptions.skip = self.searchOptions.skip + limit;
+        self._add();
+      }
+    }
+  })
 }
 
 
@@ -598,6 +634,7 @@ App.prototype._clearLayers = function() {
 
   if ( this.endLayer ) {
     this.map.removeLayer(this.endLayer);
+    this.endLayer = null;
   }
 
   if ( this.sourceLayer ) {
@@ -610,11 +647,10 @@ App.prototype._clearLayers = function() {
 App.prototype._drawArcs = function (id) {
   var self = this;
 
-  if ( ! this.arcsLayer ) {
+  if ( !this.arcsLayer ) {
     this.arcsLayer = L.geoJson().addTo( this.map );
   }
 
-  self.arcsLayer.clearLayers();
   self._clearLayers();
 
   var latlngs = [];
@@ -743,6 +779,7 @@ App.prototype._find = function(data) {
   self._clearLayers();
 
   this.data = [];
+  this.meta = {};
 
   var data = this.searchOptions;
   var options = {};
@@ -756,12 +793,45 @@ App.prototype._find = function(data) {
     options.classification = c;
     recalls.find(options, function(results) {
       results.classification = c;
+      
+      self.meta[c] = results.meta;
       self.showList(results, self.states[data.text] + ' Recall List <span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
       
       self.data = _.union(self.data, results.results);
       self._wireList();
 
     });
+
+  });
+
+}
+
+
+
+App.prototype._add = function(data) {
+  var self = this;
+  
+  self._clearLayers();
+
+  var data = this.searchOptions;
+  var options = {};
+  options.location = data.text;
+  options.date = (data.date) ? data.date : null;
+  options.status = (data.status) ? data.status : null;
+  options.classification = ( data.classification ) ? data.classification : null;
+  options.skip = ( data.skip ) ? data.skip : 0;
+
+  options.api = 'food/enforcement.json';
+  
+  var classes = ['Class+I', 'Class+II', 'Class+III'];
+  recalls.find(options, function(results) {
+    results.classification = options.classification;
+    
+    self.meta[options.classification] = results.meta;
+    self.showList(results, self.states[data.text] + ' Recall List <span id="overview" style="cursor:pointer;font-size: 0.6em;float: right;margin-top: 4px;color: #337ab7;">Back to Overview</span>', 'recalls' );
+    
+    self.data = _.union(self.data, results.results);
+    self._wireList();
 
   });
 
