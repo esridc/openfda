@@ -769,7 +769,7 @@ App.prototype._censusStats = function(states) {
     }
   });
 
-  formattedPop = totalPop.toLocaleString();
+  formattedPop = numeral(totalPop).format('0,0');
 
   $('#census').show();
   $('#total-pop').html(formattedPop);
