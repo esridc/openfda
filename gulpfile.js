@@ -6,7 +6,6 @@ var $ = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var ghPages = require('gulp-gh-pages');
-var mocha = require('gulp-mocha');
 var karma = require('karma').server;
 
 gulp.task('deploy', function() {
