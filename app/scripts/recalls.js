@@ -1,12 +1,10 @@
 var Recalls = function(options){
   var self = this;
-  console.log('FDA API Wrapper');
 
   this.base_url = options.url || 'https://api.fda.gov/';
   this.api_key = options.api_key || 'J9fMuXQVgb0ftI7BPSEDGMT49c9yXdHxKPWRxaVN';
   this.api = 'food/enforcement.json';
-
-  //"https://api.fda.gov/food/enforcement.json?api_key=J9fMuXQVgb0ftI7BPSEDGMT49c9yXdHxKPWRxaVN&count=state"
+  
 };
 
 
@@ -45,6 +43,10 @@ Recalls.prototype.find = function(options, cb) {
 
   if ( options.status ) {
     url = url + '+AND+status:' + options.status;
+  }
+
+  if ( options.skip ) {
+    url = url + '&skip=' + options.skip;
   }
 
   this.getData(url, {}, function(data) {
