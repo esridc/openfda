@@ -6,6 +6,7 @@
     "modernizr": "~2.8.1",
     "moment": "~2.10.3",
     "nprogress": "~0.2.0",
-    "arc.js": "~0.1.0"
+    "arc.js": "~0.1.0",
+    "numeraljs": "~1.5.3"
   }
 }
