@@ -49,6 +49,8 @@ App.prototype.createMap = function() {
   searchControl.on('results', function(data){
     var state = data.results[0].properties.Region;
 
+    if ( state === 'Washington, D.C.' || state === 'District of Columbia' ) { state = 'DC'; }
+    
     _.each(self.states, function(st, abbr) {
       if ( st === state ) {
         state = abbr;
