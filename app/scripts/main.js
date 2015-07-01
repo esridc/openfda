@@ -353,6 +353,12 @@ App.prototype.createHomeChart = function(data, title) {
   $('#list-header').html(title);
   $('#detail-item').empty().hide();
 
+  var width = $(window).width();
+  if ( width < 768 ) {
+    $('#list-container').hide();
+    return;
+  }
+
   var el = '<div id="home-chart"></div>';
   $('#list').append(el);
 
@@ -594,6 +600,8 @@ App.prototype._wireList = function() {
   });
 
   $('#overview').on('click', function(e) {
+    var width = $(window).width();
+
     if ( self.arcsLayer ) {
       self._clearLayers();
     }
