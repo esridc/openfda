@@ -14,16 +14,15 @@ Provide food-related decisions makers actionable insights based [open FDA](https
 
 ### Backlog
 
-We are using Huboard for our backlog - 
+We are using Huboard for our backlog
 
 ## Team
 
 - product owner - Gerry
-- scrum master - Mike
+- scrum master - Mike/Andrew
 - development engineers - Brendan, Andrew, Daniel
 - UI design - Mike
 - UX & Usability design - Jennie
-- scrum coach - Marten
 - domain experts - Este
 - user testers - Liza, Jody
 
