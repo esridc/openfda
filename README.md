@@ -67,13 +67,13 @@ At the second daily call we recognized that we needed to support a back-end impl
 
 Between Each set of wireframes we performed **Usability Testing** with colleagues adopting the Mary and Dr. Bob personas. They outlined a number of issues – color schemes, working, and confusion over workflow – that were provided to the UI/UX team for **Iteration and Development**.  
 
-We worked to prioritize the issues that came back from user feedback - for example, during our expert interview it was noted that incorporating additional data to show the magnitude of a recall would be extremely useful to our end users.  We identified this in issue #XX and prioritized it over some other development issues.  
+We worked to prioritize the issues that came back from user feedback - for example, during our expert interview it was noted that incorporating additional data to show the magnitude of a recall would be extremely useful to our end users.  We identified this in issue #41 and prioritized it over some other development issues.  
 
-We broadcasted the URL to a wide range of staff within the Esri organization and asked staff to test on a variety of devices. We identified a number of issues on the Android and iOS devices (issues #YYY) and were able to correct and redeploy for testing.
+We broadcasted the URL to a wide range of staff within the Esri organization and asked staff to test on a variety of devices. We identified a number of issues on the Android and iOS devices (issues #63 #64) and were able to correct and redeploy for testing.
 
 As code was developed, continuous unit testing was conducted by the team (location of tests??)
 
-A final deployment meeting was held on Thursday July 2 to review the status of the prototype, confirm that all tests had been passed and that the prototype was ready for deployment to GSA.  No further work took place on the prototype - we chose to wait until July 7 to submit the prototype and supporting documentation - in case any additional amendments were issued and changed any of the submission requirements.
+A final deployment meeting was held on Thursday July 2 to review the status of the prototype.  One issue was identified in testing (issue #80) that needs to be addressed.  Team will work to address and deploy over long weekend.  A final test will be conducted on Monday July 6 and team will confirm that prototype is ready for deployment to GSA.  No further work is expected to take place on the prototype - we chose to wait until July 7 to submit the prototype and supporting documentation - in case any additional amendments were issued and changed any of the submission requirements.
 
 
 
