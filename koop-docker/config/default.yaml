@@ -1,0 +1,6 @@
+# Express server
+server:
+  port: 8000
+
+data_dir: /usr/lib/koop
+
