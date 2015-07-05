@@ -1,0 +1,41 @@
+{
+  "name": "koop-fda",
+  "description": "A FDA Food Recalls Provider for Koop",
+  "version": "1.0.0",
+  "author": "Daniel Fenton",
+  "bugs": {
+    "url": "https://github.com/koopjs/koop-fda/issues"
+  },
+  "dependencies": {
+    "async": "~0.9.0",
+    "config": "~0.4.35",
+    "crypto": "0.0.3",
+    "ejs": "~1.0.0",
+    "request": "~2.53.0",
+    "turf-merge": "^1.0.2"
+  },
+  "devDependencies": {
+    "koop": "*",
+    "mocha": "^2.2.5",
+    "nock": "^2.6.0",
+    "should": "~4.0.4",
+    "sinon": "~1.10.3",
+    "standard": "^4.5.1",
+    "supertest": "~0.11.0"
+  },
+  "homepage": "https://github.com/koopjs/koop-opendata",
+  "keywords": [
+    "FDA",
+    "Food Recalls",
+    "koop"
+  ],
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koopjs/koop-fda.git"
+  },
+  "scripts": {
+    "test": "standard && mocha test/"
+  }
+}
