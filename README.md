@@ -26,9 +26,7 @@ We are using Huboard for our backlog
 - domain experts - Este
 - user testers - Liza, Jody
 
-## Development
-
-### Front-End application
+## Front-End application
 
 * Install: `npm install` and `bower install`
 * Run locally: `gulp serve`
@@ -40,6 +38,29 @@ We are using Huboard for our backlog
 
 * `gulp test`
 
+## Back-End application
+
+Plugin to [Koop](https://github.com/esri/koop) written in Javascript for Node.js supports filtered downloads in `kml, csv, shapefile, and geojson`. Also supports Esri Featureservice requests
+
+* Code style: [Standard Format] (https://github.com/feross/standard)
+* Testing: `standard && mocha test/*.js`
+* Continuous integration testing: [Travis CI](https://travis-ci.org/koopjs/koop-fda)
+* Complexity monitoring: [Code Climate](https://codeclimate.com/github/koopjs/koop-fda)
+* Package management: [NPM](https://travis-ci.org/koopjs/koop-fda) 
+* Container image builds: [Docker](https://registry.hub.docker.com/u/dmfenton/koop-docker-example/)
+
+### Installation
+
+[See docs](docs/koop-install.md)
+
+### Deployment
+
+* 2x `t2.medium` instances on Amazon Web Services
+* 1 Service running 2 deployments of a task on [Amazon Container Services](http://aws.amazon.com/ecs/)
+* Elastic load balancer to manage web traffic: http://koop-fda-1504637322.us-east-1.elb.amazonaws.com/
+* Cloudwatch monitors healthy instance counts
+* Launch configuration manages instance settings
+* Autoscaling group manages instance launches in response to Cloudwatch alarms
 
 ## Approach used to create prototype
 
