@@ -580,6 +580,8 @@ App.prototype._wireList = function() {
   var height = $('#list-container').height();
   $('.detail-list').css({'height': height- (liTop - containerTop) + 10 + 'px'});
 
+  $('#detail-item').css({'height': height- (liTop - containerTop) + 35 + 'px'});
+
 
   $('.list-element').off('mouseenter'); 
   $('.show-details').off('click');
