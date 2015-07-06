@@ -29,6 +29,12 @@ eval "$(docker-machine env dev)"
 
 ## Setting up Koop and PostGIS
 
+Change directory to koop-docker
+
+```
+cd koop-docker
+```
+
 ### PostGIS
 
 Start up the PostGIS container using `docker-compose`.
