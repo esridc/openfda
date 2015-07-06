@@ -215,6 +215,8 @@ body,html {
   #detail-item {
     margin-bottom:40px;
     margin-top:-30px;
+    overflow:hidden;
+    overflow-y: auto;
   }
   .detail-section {
     margin-bottom:15px;
