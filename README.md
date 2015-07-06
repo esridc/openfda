@@ -87,7 +87,7 @@ Based on their feedback we crafted three **User Personas** to represent the need
 The Technical Architect set up **Remote Collaboration Tools** including a GitHub repository including a wiki for documentation, HuBoard for backlog management and tracking, Balsamiq for interface wireframes, and TravisCI for continuous integration testing. The development team used Yeoman to generate a web application using Bootstrap CSS framework, Leaflet for visualization, Gulp for build tools, and Mocha for unit tests. More than 5 modern and open-source technologies were utilized to develop the prototype.
 
 The Product Manager set up **Daily Standups** for 1pm ET every day – with a team that was spread across different time zones. During these calls we reviewed status, what everybody was working on, what they needed and what was blocking their progress.  
-At the second daily call we recognized that we needed to support a back-end implementation in order to meet some of the evaluation requirements – so we expanded the Dr. Bob use cases to include more analytical business needs and decided to extend and deploy the [Koop](https://github.com/esri/koop) open-source project.  We chose to implement the prototype as a HTML 5 application so that it could run on multiple devices in a responsive design without building separate apps for unique devices.
+At the second daily call we recognized that we needed to support a back-end implementation in order to meet some of the evaluation requirements (deploying on a Iaas and within a container) – so we expanded the Dr. Bob use cases to include more analytical business needs and decided to extend and deploy the [Koop](https://github.com/esri/koop) open-source project. The Koop project was deployed on the Amazon Web Services architecture and was set up to run in a DOCKER container.  We chose to implement the prototype as a HTML 5 application so that it could run on multiple devices in a responsive design without building separate apps for unique devices.  We tested on Android, iOS and Windows and were able to verify that the deisgn responded accordingly.
 
 Between each set of wireframes we performed **Usability Testing** with colleagues adopting the Mary and Dr. Bob personas. They outlined a number of issues – color schemes, working, and confusion over workflow – that were provided to the UI/UX team for **Iteration and Development**.  
 
@@ -95,10 +95,12 @@ We worked to prioritize the issues that came back from user feedback - for examp
 
 We broadcasted the URL to a wide range of staff within the Esri organization and asked staff to test on a variety of devices. We identified a number of issues on the Android and iOS devices (issues #63 and #64) and were able to correct and redeploy for testing.
 
-As code was developed, continuous unit testing was conducted by the team.
+As code was developed, continuous unit testing was conducted by the team.  Configuration management and continuous monitoring was supported via AWS components to manage the overall backend configuration (AWS Launch Configurations
+AWS Auto Scaling Group and AWS Launch Configurations).  In addition, we set up a Cloudwatch monitor for the main prototype URL. 
 
 A final deployment meeting was held on Thursday July 2 to review the status of the prototype.  One issue was identified in testing (issue #80) that needs to be addressed.  The Team worked to address and deploy over the long weekend.  A final test will be conducted on Monday July 6 and the team will confirm that prototype is ready for deployment to the GSA.  No further work is expected to take place on the prototype - we chose to wait until July 7 to submit the prototype and supporting documentation - in case any additional amendments were issued and changed any of the submission requirements.
 
+All of the tools used to build this prototype come from Esri's stack of open source technology. Open Source License is the Apache license.  Data services, such as base maps, locators and demographics are from Esri and are free for public use.  Additional information can be found at http://esri.github.io/ 
 
 ## License 
 
