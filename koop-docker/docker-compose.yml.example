@@ -1,0 +1,15 @@
+postgis:
+  image: kpettijohn/postgis
+  ports:
+    - "5432:5432"
+
+koopPG:
+  image: esridc/koop-fda
+  command: koop postgis
+  links:
+    - postgis
+  environment:
+    - KOOP_CACHE=postgis
+    - fda_key=your_api_key
+  ports:
+    - "8002:8000"
