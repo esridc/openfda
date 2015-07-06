@@ -35,6 +35,16 @@ Change directory to koop-docker
 cd koop-docker
 ```
 
+### Editing environmentalv variables
+
+Rename docker-compose.yml.example
+
+```
+mv docker-compose.yml.example docker.compose.yml
+```
+
+Edit the file and add in your [API Key](https://open.fda.gov/api/reference/#your-api-key)
+
 ### PostGIS
 
 Start up the PostGIS container using `docker-compose`.
