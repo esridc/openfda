@@ -51,7 +51,7 @@ Plugin to [Koop](https://github.com/esri/koop) written in Javascript for Node.js
 
 ### Installation
 
-[See docs](docs/koop-install.md)
+[See docs](koop-docker/README.md)
 
 ### Deployment
 
