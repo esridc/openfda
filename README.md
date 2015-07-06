@@ -47,7 +47,7 @@ Plugin to [Koop](https://github.com/esri/koop) written in Javascript for Node.js
 * Continuous integration testing: [Travis CI](https://travis-ci.org/koopjs/koop-fda)
 * Complexity monitoring: [Code Climate](https://codeclimate.com/github/koopjs/koop-fda)
 * Package management: [NPM](https://travis-ci.org/koopjs/koop-fda) 
-* Container image builds: [Docker](https://registry.hub.docker.com/u/dmfenton/koop-docker-example/)
+* Container image builds: [Docker](https://registry.hub.docker.com/u/esridc/openfda-koop/)
 
 ### Installation
 
