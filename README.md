@@ -70,6 +70,8 @@ Esri adopted an agile approach to developing the FDA Data Prototype.
 
 Our Prototype team was assembled and met for the first time on Tuesday, June 23.  The team was assembled by the Delivery Manager and included individuals from across Esri - at least 6 different labor categories were involved in the development of the prototype.  The Delivery Manager has the authority and responsibility for delivering a quality prototype.
 
+The overall goal of the prototype was to bring a spatial view to the FDA data.  The user can get a quick sense upon opening the prototype about the volume of overall requests for recalls by State - illustrated by the chart on the right side and the choropleth color of the states.  They can interact with the map directly (or via the seach tool) to focus on a specific State.  The panel on the right side updates with just the recalls for that State in 3-tabs.  The user can easily scroll over the recalls in that box and they see a dynamic illustration on the map - a pointer showing the State where the recall product was from and a set of lines that link to all the States that were impacted by that recall.  At the bottom of the panel a population count and % number illustrates the potential populaiton impact of that recalled product.
+
 Our first steps were to embark on the Define, Prioritize and Plan approach that allowed us to clearly define who the users would be for the prototype, what their business needs were, and stand up the initial architecture that would support the prototype.
 
 Defining the users of the prototype and what their needs are is a critical first step.  The Team reviewed the data that was made available through the API at https://open.fda.gov and had a brain storming session that sought to:
