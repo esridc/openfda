@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-- '0.10'
+- "0.10"
 before_script:
   - gem install sass
   - npm install -g grunt-cli
   - npm install -g bower
   - bower install
+script: bash ./deploy.sh
 env:
   global:
     - GH_REF: github.com/esridc/openfda.git
-    - secure: PEVYUwbX+rdc/p7Ekg1eJy03rYSz8yWaTzQPcte7irzRpbhIo2ax4ICYd7xm2FjTkPKg3+T6WNhGpxI1P4wberWS3RjuU60qCQi8S90Y51exP7iedsD3WY0QJQnfb7OhHVYrEzEEhfJedZ/kRqYMJRmN1fWlh/H8jUh8Vedx7mAhGyr67fwfXCQMLuC1qFcd67v7oVbmD+7FS/NjtFmFc+25Xq1X/UsvZaT+kLQj6ALbW6PQOPBEmo0PJnc8yKHFz1peyBdFCaOJip833d/9eJnYrQ3dsvqvKKnBDs9AMJb1oTxnpIHOjczx9YxlbMUtBxyEszp9C2hyZwH30B59/whL1KldY03awRLIIBVMH9+ywqXRG3dRG9I1b9v/PG/vqPibBH1bbBmj5J8DV93CYXa1RWbQH+qWrLnB5A07asG0cbZ4T/xdrxQn5FuarMx+B+4PWTgj5bwRrVEnEXEN8L69z3ReekDkgQ7UXGEWZgx7ryf+TQuA4qxyXdTaGl6fQtkkhSUQIHiYCdE82f2SkajPLHmauMLMMeUapOj1DGHQ5+iTK5Exnh1ATqsyHNleitk6VcdGajlKeOnNzob7+U1HTPQKLnHJe2GimPyESCf1IxrcbLty54c/XHUhOM8NpmD7Bj7EyMbHd6ZUzJTEiYBuIC2x7aEcQvR376gO9C4=
+    - secure: "xTPQnquWNA9Rcbq5rvWMpm12HpKqRYKFZlvcWmjm3IEh1Y7C/mgqGq3Yet9i6DBqw4MHlJnqbRvtr1XdGRfptjF9Y/cd8UcoW4ZCVfBtlv9g8d1AYZq9xfxL8a5VKYNI5R1UsDFlIhKTCgmaX1DN5aWC6SvYjZ+eQPU7UeEAyCnIwV7ILipVJjRGu9nbnyqldUUAvFSMOTyBp2Ivp6Ln7TLWoIzO/tbeRAJxlj76GynmWqHeU7Jovjv1p+pCZjS3o+aW/C9yr5m/K5UV8cQElktT+QerdyPuGAQpy+2oJlwLxofi1ZX3c+cGSCAQ+tp8ADZTFP40IDLTyQ3G12HuTKkzOvYyZYL6TOSEaV6mxvr8FjAG8HOXTpNQS8K9/O6y51oESa8Cjv6X/rqd49lOy8lCMH9PQanz+GkyTsI/XRvBz46HhOq/8ihzPuU+k6UVHs8dDUdZj+CbOz8wihcJHdVFLKBxVAn5dUfrtLMmQIn9dX/rojrgTh/gAhiGMAkqMSSpJaOAuoCaDUd0EbTWWXz7RgXZ1DRINylxdTjuvSBPJngPzYdh/CNuH0p18RuAvV981n3D67CGrio3wnU521p2RmSE3yDqJU78LVyIGTHnZpSn4Q6uIqdzScDpmrNZfA3Fzwy60v8nud3AC/ajVjP+G2Uao3ZZJYNDP8UVGQ0="
