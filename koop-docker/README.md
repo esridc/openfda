@@ -40,7 +40,7 @@ cd koop-docker
 Rename docker-compose.yml.example
 
 ```
-mv docker-compose.yml.example docker.compose.yml
+mp docker-compose.yml.example docker-compose.yml
 ```
 
 Edit the file and add in your [API Key](https://open.fda.gov/api/reference/#your-api-key)
