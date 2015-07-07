@@ -4,7 +4,7 @@ postgis:
     - "5432:5432"
 
 koopPG:
-  image: esridc/koop-fda
+  image: esridc/openfda-koop
   command: koop postgis
   links:
     - postgis
