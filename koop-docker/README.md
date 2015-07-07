@@ -62,7 +62,17 @@ docker-compose up --no-deps koopPG
 You can test that everything's working fine with a simple curl. Or checkout what you can do with the [FDA provider](../koop-fda/README.md)
 
 ```
-curl -XGET 127.0.0.1:8002/status
+curl -XGET '192.168.204.178:8002/status'
+```
+
+Note: If this doesn't work, check to address of your Docker host and take the IP address from the DOCKER_HOST env variable
+``` 
+docker-machine env                                                                                                                                          [11:25:24]
+export DOCKER_TLS_VERIFY=1
+export DOCKER_CERT_PATH="/Users/dev/.docker/machine/machines/dev"
+export DOCKER_HOST=tcp://192.168.204.178:2376
+
+# Run this command to configure your shell: eval "$(docker-machine env)"
 ```
 
 ## Contributing
