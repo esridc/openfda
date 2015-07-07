@@ -1,3 +1,12 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
+before_script:
+  - gem install sass
+  - npm install -g grunt-cli
+  - npm install -g bower
+  - bower install
+env:
+  global:
+    - GH_REF: github.com/esridc/openfda.git
+    - secure: PEVYUwbX+rdc/p7Ekg1eJy03rYSz8yWaTzQPcte7irzRpbhIo2ax4ICYd7xm2FjTkPKg3+T6WNhGpxI1P4wberWS3RjuU60qCQi8S90Y51exP7iedsD3WY0QJQnfb7OhHVYrEzEEhfJedZ/kRqYMJRmN1fWlh/H8jUh8Vedx7mAhGyr67fwfXCQMLuC1qFcd67v7oVbmD+7FS/NjtFmFc+25Xq1X/UsvZaT+kLQj6ALbW6PQOPBEmo0PJnc8yKHFz1peyBdFCaOJip833d/9eJnYrQ3dsvqvKKnBDs9AMJb1oTxnpIHOjczx9YxlbMUtBxyEszp9C2hyZwH30B59/whL1KldY03awRLIIBVMH9+ywqXRG3dRG9I1b9v/PG/vqPibBH1bbBmj5J8DV93CYXa1RWbQH+qWrLnB5A07asG0cbZ4T/xdrxQn5FuarMx+B+4PWTgj5bwRrVEnEXEN8L69z3ReekDkgQ7UXGEWZgx7ryf+TQuA4qxyXdTaGl6fQtkkhSUQIHiYCdE82f2SkajPLHmauMLMMeUapOj1DGHQ5+iTK5Exnh1ATqsyHNleitk6VcdGajlKeOnNzob7+U1HTPQKLnHJe2GimPyESCf1IxrcbLty54c/XHUhOM8NpmD7Bj7EyMbHd6ZUzJTEiYBuIC2x7aEcQvR376gO9C4=
