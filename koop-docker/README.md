@@ -37,13 +37,13 @@ cd koop-docker
 
 ### Editing environmentalv variables
 
-Rename docker-compose.yml.example
+Copy docker-compose.yml.example to docker-compose.yml
 
 ```
-mp docker-compose.yml.example docker-compose.yml
+cp docker-compose.yml.example docker-compose.yml
 ```
 
-Edit the file and add in your [API Key](https://open.fda.gov/api/reference/#your-api-key)
+Edit the docker-compose.yml file and add in your [API Key](https://open.fda.gov/api/reference/#your-api-key)
 
 ### PostGIS
 
